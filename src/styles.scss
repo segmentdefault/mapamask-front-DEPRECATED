@@ -1,1 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
+
+body{
+    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#f7911d8a)) fixed;
+}
+
+.end{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.center{
+    display: flex;
+    justify-content: center;
+}
+
+.start{
+    display: flex;
+    justify-content: flex-start;
+}

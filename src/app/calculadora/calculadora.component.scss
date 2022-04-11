@@ -1,0 +1,35 @@
+select{
+    width: 90px;
+    border-radius: 10px;
+    border: 0;
+    padding: 10px;
+    background-color: #ffffff;
+    color: #804617;
+    cursor: pointer;
+}
+
+select:hover{
+    background-color: #8046178a;
+    color: #ffffff;
+}
+
+input{
+    border-radius: 10px;
+    border: 0;
+    text-align: center;
+    height: 45px;
+    width: 40%;
+    background-color: #ffffff;
+    color: #804617;
+}
+
+.logo-crypto{
+    width: 100px;
+    padding: 20px;
+}
+
+@media (max-width: 500px){
+    input{
+        width: 90%;
+    }
+}
