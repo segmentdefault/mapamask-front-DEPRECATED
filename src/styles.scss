@@ -2,9 +2,27 @@
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
+@font-face {
+    font-family: "Avenir Next LT Pro Regular";
+    src: url('./assets/fonts/AvenirNextLTPro-Regular.otf');
+}
+@font-face {
+    font-family: "Avenir Next LT Pro Bold";
+    src: url('./assets/fonts/AvenirNextLTPro-Bold.otf');
+}
+
+h1,h2,h3,h4,h5,h6{
+    font-family: "Avenir Next LT Pro Bold";
+}
+
+html{
+    font-family: "Avenir Next LT Pro Regular";
+}
 
 body{
-    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#f7911d8a)) fixed;
+    /* background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#FCD6AB)) fixed; */
+    background-color: #ffffff;
+    font-family: "Avenir Next LT Pro Regular";
 }
 
 .end{
@@ -20,4 +38,39 @@ body{
 .start{
     display: flex;
     justify-content: flex-start;
+}
+
+.mapamask-btn{
+    border-radius: 10px;
+    border: 0;
+    background-color: #f7911d;
+    color: #ffffff;
+    padding: 10px;
+}
+
+.mapamask-btn:hover{
+    background-color: #f7911d85;
+}
+
+input, select, textarea{
+    border: 0;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid #000000;
+    padding-left: 20px;
+    background-color: #ffffff;
+}
+
+textarea{
+    padding: 10px 0 0 20px;
+    height: 100px;
+}
+
+input[type=file]{
+    border: 0;
+}
+
+input[type=file]::-webkit-file-upload-button {
+    border: 1px solid #ffffff;
+    background-color: #f7911d;
 }

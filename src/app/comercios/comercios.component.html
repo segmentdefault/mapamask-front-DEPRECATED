@@ -1,1 +1,90 @@
-<h1 class="center">Comercios</h1>
+<div class="container" style="width: 80%;">
+    <div class="row mt-5">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12">
+            <h1>¿Quieres cobrar con cryptos?</h1>
+            <h1>¡Da de alta tu negocio!</h1>
+            <p class="mt-3">Tu plataforma donde explorar los comercios que aceptan criptomonedas.</p>
+            <button (click)="openRegister()" class="mapamask-btn mt-3">Darse de alta</button>
+        </div>
+    </div>
+</div>
+<div class="row mt-5 center">
+    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12-col-12" [ngClass]="width >= 768 ? 'end' : 'center'">
+        <input [(ngModel)]="cityInput" placeholder="Provincia" type="text" class="search-input" style="width: 90%;">
+    </div>
+    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12-col-12" [ngClass]="width >= 768 ? 'end' : 'center'">
+        <input [(ngModel)]="keywordInput" placeholder="Palabra clave" type="text" class="search-input" style="width: 90%;">
+    </div>
+
+    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12-col-12 center">
+        <select [(ngModel)]="sectorInput" name="sector" id="sector" class="search-input" style="width: 90%;">
+            <option value=""></option>
+            <option value="ocioRestauracion">Ocio y restauración(Bares, restaurantes, discotecas, pubs...)</option>
+            <option value="serviciosTecnicos">Servicios técnicos()</option>
+            <option value="cuidadoPersonal">Cuidado personal(Peluquerías, masajistas, manicura...)</option>
+            <option value="modaComplementos">Moda y complementos(sastreria, tiendas de ropa, joyerias...)</option>
+        </select>
+    </div>
+
+    <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12-col-12" [ngClass]="width >= 768 ? 'end' : 'center'">
+        <button (click)="searchBusiness(cityInput, keywordInput, sectorInput)" class="mapamask-btn search-btn">Buscar</button>
+    </div>
+    
+</div>
+
+<div class="row mt-5"*ngIf="searchLoading">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <h4>Loading…</h4>
+    </div>
+</div>
+
+<div class="row mt-5" *ngIf="info != ''">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
+        <h4  class="alert alert-primary">{{ info }}</h4>
+    </div>
+</div>
+
+<div class="row mt-5" *ngIf="status != ''">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
+        <h4  class="alert alert-warning">{{ status }}</h4>
+    </div>
+</div>
+
+<div class="row mt-5" *ngIf="error != ''">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
+        <h4 class="alert alert-danger">{{ error }}</h4>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center" *ngFor="let business of businessSearch">
+        <div class="row mt-4 result" (click)="seeBusinessDetails(business)" ><!-- [routerLink]="['/comercio', business.id]" -->
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3">
+                <img [src]="business.image" alt="">
+            </div>
+            <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-9">
+                <div class="row">
+                    <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10">
+                        <h3>{{ business.name }}</h3>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 end">
+                        <p>{{ business.puntuacion }}<i class="fa-solid fa-star star"></i></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <p>{{ business.job }}</p>
+                        <hr>
+                        <p>Web: <a [href]="business.web" target="_blank">{{ business.web }}</a></p>
+                        <p>Teléfono: {{ business.phone }}</p>
+                        <p>Email: {{ business.email }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="center">
+    <div id="map"></div>
+</div> -->

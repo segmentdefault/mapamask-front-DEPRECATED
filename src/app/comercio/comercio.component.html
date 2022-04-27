@@ -1,0 +1,19 @@
+
+<div class="container">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="comercio">
+            <img [src]="comercio.image" alt="">
+            <h1>{{ comercio.name }}</h1><p>{{ comercio.puntuacion }}<i class="fa-solid fa-star star"></i></p>
+            <h4>{{ comercio.job }}</h4>
+            <p>{{ comercio.description }}</p>
+            <h3>Datos personales</h3>
+            <ul>
+                <li>{{ comercio.city }}</li>
+                <li>{{ comercio.email }}</li>
+                <li>{{ comercio.phone }}</li>
+                <li>{{ comercio.web }}</li>
+                <li>{{ comercio.sector }}</li>
+            </ul>
+        </div>
+    </div>
+</div>

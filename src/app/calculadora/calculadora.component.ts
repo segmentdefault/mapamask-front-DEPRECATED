@@ -76,7 +76,7 @@ export class CalculadoraComponent implements OnInit {
       let data = await result.json();
       let price = data.price;
 
-      this.resultCrypto = (1 / (parseFloat(this.fiatAmount) / price)).toString();
+      this.resultCrypto = (parseFloat(this.fiatAmount) * (1 * price)).toString();
 
     } else {
 
@@ -93,7 +93,7 @@ export class CalculadoraComponent implements OnInit {
 
   async getPriceInUSD(){
     if(this.crypto == "USDT"){
-      this.resultCrypto = "1";
+      this.resultCrypto = this.fiatAmount;
 
     } else {
 
