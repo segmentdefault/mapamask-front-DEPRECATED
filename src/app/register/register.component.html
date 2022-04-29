@@ -1,46 +1,71 @@
 <div class="container register-container">
   <div class="row mt-5">
     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 center">
-        <h3>Rellena el siguiente formulario... ¡y acepta cryptos en tu negocio!</h3>
+        <h3>Rellena el siguiente formulario...</h3>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 center">
+        <h3>¡y acepta cryptos en tu negocio!</h3>
+    </div>
+  </div>
+
   <div class="container form-container">
     <div class="row">
       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-5">
-          <input type="text" placeholder="Nombre">
+          <input [(ngModel)]="name" type="text" placeholder="Nombre">
       </div>
     </div>
   
     <div class="row">
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 end mt-3">
-        <input type="text" placeholder="Correo">
+        <input [(ngModel)]="email" type="text" placeholder="Correo">
       </div>
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 start mt-3">
-          <input type="text" placeholder="Teléfono">
+          <input [(ngModel)]="phone" type="text" placeholder="Teléfono">
       </div>
     </div>
   
     <div class="row">
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 end mt-3">
-        <input type="text" placeholder="Sector">
+        <input [(ngModel)]="sector" type="text" placeholder="Sector">
       </div>
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 start mt-3">
-          <input type="text" placeholder="Trabajo">
+          <input [(ngModel)]="job" type="text" placeholder="Trabajo">
       </div>
     </div>
   
     <div class="row">
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 end mt-3">
-        <input type="text" placeholder="Dirección">
+        <input [(ngModel)]="street" type="text" placeholder="Calle">
       </div>
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 start mt-3">
-        <input type="text" placeholder="Web">
+        <input [(ngModel)]="number" type="text" placeholder="Numero">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 end mt-3">
+        <input [(ngModel)]="cp" type="text" placeholder="Código postal">
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 start mt-3">
+        <input [(ngModel)]="city" type="text" placeholder="Localidad">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 end mt-3">
+        <input [(ngModel)]="country" type="text" placeholder="País">
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 start mt-3">
+        <input [(ngModel)]="web" type="text" placeholder="Web">
       </div>
     </div>
     
     <div class="row">
       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
-        <textarea placeholder="Descripción"></textarea>
+        <textarea [(ngModel)]="description" placeholder="Descripción"></textarea>
       </div>
     </div>
   
@@ -53,7 +78,12 @@
     <div class="row">
       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
         <button class="mapamask-btn" (click)="sendRegisterRequest()">Enviar</button>
+        <button class="mapamask-btn" (click)="showAtMap(number, street, cp, city, country)">Comprobar dirección</button>
       </div>
     </div>
   </div>
+</div>
+
+<div class="center">
+  <div id="map"></div>
 </div>

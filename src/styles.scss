@@ -2,27 +2,41 @@
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
+
 @font-face {
     font-family: "Avenir Next LT Pro Regular";
     src: url('./assets/fonts/AvenirNextLTPro-Regular.otf');
 }
+
 @font-face {
     font-family: "Avenir Next LT Pro Bold";
     src: url('./assets/fonts/AvenirNextLTPro-Bold.otf');
 }
 
+@font-face {
+    font-family: "Montserrat";
+    src: url('./assets/fonts/Montserrat/Montserrat-Light.ttf');
+}
+
+@font-face {
+    font-family: "Montserrat-bold";
+    src: url('./assets/fonts/Montserrat/Montserrat-Bold.ttf');
+}
+
+@font-face {
+    font-family: "Montserrat-semiBold";
+    src: url('./assets/fonts/Montserrat/Montserrat-SemiBold.ttf');
+}
+
 h1,h2,h3,h4,h5,h6{
-    font-family: "Avenir Next LT Pro Bold";
+    font-family: "Montserrat-bold";
 }
-
-html{
-    font-family: "Avenir Next LT Pro Regular";
-}
-
-body{
+body, html{
     /* background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#FCD6AB)) fixed; */
     background-color: #ffffff;
-    font-family: "Avenir Next LT Pro Regular";
+    font-family: "Montserrat";
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .end{
@@ -43,13 +57,13 @@ body{
 .mapamask-btn{
     border-radius: 10px;
     border: 0;
-    background-color: #f7911d;
+    background-color: #804517;
     color: #ffffff;
     padding: 10px;
 }
 
 .mapamask-btn:hover{
-    background-color: #f7911d85;
+    background-color: #6f6f6f;
 }
 
 input, select, textarea{

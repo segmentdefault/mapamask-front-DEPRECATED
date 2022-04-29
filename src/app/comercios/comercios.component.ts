@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Comercio } from '../interfaces/comercio.inteface';
+import { Business } from '../interfaces/business.inteface';
 import * as L  from 'leaflet';
-import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
+import { BusinessService } from '../services/business.service';
+import { preventOverflow } from '@popperjs/core';
 @Component({
   selector: 'app-comercios',
   templateUrl: './comercios.component.html',
@@ -12,140 +13,55 @@ import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 export class ComerciosComponent implements OnInit {
   width: any;
 
-  business: Array<Comercio> = [
-    {
-      id: 1,
-      name: "Adrián Serrano",
-      image: "../../assets/img/metamask-mapamask.jpg",
-      email: "adrian@cryptospace.es",
-      phone: "600206194",
-      description: "Mi nombre es Adrián Serrano, soy programador blockchain, ofrezco servicios de desarrollo tanto en tecnología blockchain como en el ámbito de desarrollo web convencional",
-      sector: "serviciosTecnicos",
-      job: "Desarrollador web",
-      latitude: "40.038272",
-      longitude: "0.045783",
-      city: "Castellon",
-      web: "https://www.cryptospace.es",
-      puntuacion: 5
-    },
-    {
-      id: 2,
-      name: "Camille de lemans",
-      image: "../../assets/img/metamask-mapamask.jpg",
-      email: "martin@cryptospace.es",
-      phone: "666666666",
-      description: "sastreria en madrid de trajes a medida",
-      sector: "modaComplementos",
-      job: "sastre",
-      latitude: "40.038272",
-      longitude: "0.045783",
-      city: "Madrid",
-      web: "https://www.cryptospace.es",
-      puntuacion: 5
-    },
-    {
-      id: 3,
-      name: "Panaderia/pastelería Juan Bello",
-      image: "../../assets/img/metamask-mapamask.jpg",
-      email: "juanBello@cryptospace.es",
-      phone: "6668777888",
-      description: "La mejor panadería/pastelería de castellon",
-      sector: "ocioRestauracion",
-      job: "Panadería/Pastelería",
-      latitude: "40.038272",
-      longitude: "0.045783",
-      city: "valencia",
-      web: "https://www.cryptospace.es",
-      puntuacion: 4
-    },
-    {
-      id: 4,
-      name: "Comidas preparadas",
-      image: "../../assets/img/metamask-mapamask.jpg",
-      email: "comidaspreparadas@cryptospace.es",
-      phone: "656748839",
-      description: "Local de comidas preparadas en castellón",
-      sector: "ocioRestauracion",
-      job: "Comidas preparadas",
-      latitude: "40.038272",
-      longitude: "0.045783",
-      city: "Castellon",
-      web: "https://www.cryptospace.es",
-      puntuacion: 3
-    }
-  ];
+  business: Array<Business> = [];
 
-  businessSearch: Array<Comercio> = [];
+  map: any;
+  currentLatitude: string | null = "";
+  currentLongitude: string | null = "";
+
+  businessSearch: Array<Business> = [];
 
   cityInput: string = "";
-  sectorInput: string = "";
+  sectorInput: string = "Sector…";
   keywordInput: string = "";
 
   searchLoading: boolean = false;
 
   info: string = "Aplica filtros para optimizar tu búsqueda, también puedes buscar sin usar ningún filtro y te mostraremos todos los negocios que se han dado de alta en nuestra plataforma";
   error: string = "";
-  status: string = "";
 
   constructor(
-    private router: Router
+    private router: Router,
+    private businessService: BusinessService
   ) { }
 
   ngOnInit(): void {
     this.width = window.screen.width;
-
-    //this.setMap();
-  }
-
-  setMap(){
-    var map = L.map('map').setView([40, -0.04], 13);
-
-    var Jawg_Sunny = L.tileLayer('https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
-      attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> | <a href="https://www.cryptospace.es" target="_blank">CryptoSpace</a> contributors',
-      minZoom: 0,
-      maxZoom: 22,
-      subdomains: 'abcd',
-      accessToken: 'Q8ICYnDi0Fe2yGyJ2kORBlbMUu0ARufYhRjrRnoMvGXwDeluExCF3VmY3fmoQ4fs'
-    });
-
-    Jawg_Sunny.addTo(map);
-
-    for(let comercio of this.business){
-      var marcador = L.marker([parseFloat(comercio.latitude), parseFloat(comercio.longitude)])
-      marcador.bindPopup(`
-        <p style="
-          font-weight: bold;
-          color: rgb(53, 97, 218);
-          font-family: 'Avenir Next LT Pro Regular';">${comercio.name.toUpperCase()}(${comercio.city})
-        </p>
-      `).openPopup();
-
-      marcador.addTo(map);
-    }
+    this.business = this.businessService.business;
+    /* this.currentLatitude = localStorage.getItem('currentLatitude');
+    this.currentLongitude = localStorage.getItem('currentLongitude'); */
+    this.setMap();
   }
 
   openRegister(){
     this.router.navigate(['/registro']);
   }
 
-  seeBusinessDetails(business: Comercio){
-    localStorage.setItem("comercio", JSON.stringify(business));
-    this.router.navigate(['/comercio', business.id]);
-  }
-
   searchBusiness(city?: string, keyword?: string, sector?: string){
-    this.status = "";
     this.error = "";
     this.info = "";
     this.businessSearch = [];
     this.searchLoading = true;
     
-    if(!city && !sector && !keyword){
-      this.status = "No has filtrado los resultados, a continuación te mostraremos todos los negocios que aceptan crypto";
-      this.businessSearch = this.business;
+    if(!city && sector == "Sector…" && !keyword){
+      this.businessSearch = []
+
+      document.getElementById("map")!.style.display = "flex";
+      
     } else {
+      document.getElementById("map")!.style.display = "none";
       this.business.forEach(item => {
-        if(city && !sector && !keyword){
+        if(city && sector == "Sector…" && !keyword){
           if(item.city.toLowerCase() == city.toLowerCase()){
             this.businessSearch.push(item);
           }
@@ -163,7 +79,7 @@ export class ComerciosComponent implements OnInit {
           }
         }
   
-        if(!city && !sector && keyword){
+        if(!city && sector == "Sector…" && keyword){
           let descriptionArray = item.description.split(" ");
           let nameArray = item.name.split(" ");
           let jobArray = item.job.split(" ");
@@ -187,7 +103,7 @@ export class ComerciosComponent implements OnInit {
           });
         }
   
-        if(city && !sector && keyword){
+        if(city && sector == "Sector…" && keyword){
   
           if(item.city.toLowerCase() == city.toLowerCase()){
             let descriptionArray = item.description.split(" ");
@@ -269,13 +185,14 @@ export class ComerciosComponent implements OnInit {
         }
       });
   
+
       let index = 0;
       for (let i = 0; i < this.businessSearch.length; i++) {
         let indexTemporary = this.businessSearch[i].id;
+
         if(this.businessSearch[i].id == index){
-          this.businessSearch.splice(i,1);
+          this.businessSearch.splice(i)
         }
-        
         index = indexTemporary;
       }
   
@@ -286,4 +203,48 @@ export class ComerciosComponent implements OnInit {
     
     this.searchLoading = false;
   }
+
+  setMap(){
+   /*  if(this.currentLatitude && this.currentLongitude){
+      this.map = L.map('map').setView([parseFloat(this.currentLatitude), parseFloat(this.currentLongitude)], 13);
+    } else {
+      this.map = L.map('map').setView([40.0619668, -2.1830444], 6);
+    } */
+    
+    this.map = L.map('map').setView([40.0619668, -2.1830444], 6);
+    var Jawg_Sunny = L.tileLayer('https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
+      attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> | <a href="https://www.cryptospace.es" target="_blank">CryptoSpace</a> contributors',
+      minZoom: 0,
+      maxZoom: 22,
+      subdomains: 'abcd',
+      accessToken: 'Q8ICYnDi0Fe2yGyJ2kORBlbMUu0ARufYhRjrRnoMvGXwDeluExCF3VmY3fmoQ4fs'
+    });
+
+    Jawg_Sunny.addTo(this.map);
+
+    this.business.forEach(item => {
+      let popup = L.popup({
+        closeButton: false
+      }).setContent(`
+        <p style="
+          font-weight: bold;
+          color: rgb(0, 0, 0);
+          font-family: 'Montserrat';">${item.name}, ${item.job}
+        </p>
+        <a style="
+          border-radius: 10px;
+          border: 0;
+          background-color: #f7911d;
+          color: #ffffff;
+          padding: 10px;
+          text-decoration: none;"
+          href='comercio/${item.id}' target='_blank'>Ver ficha</a>
+      `);
+
+      let marker = L.marker([parseFloat(item.latitude), parseFloat(item.longitude)]).bindPopup(popup).openPopup();
+
+      marker.addTo(this.map);
+    });
+  }
 }
+

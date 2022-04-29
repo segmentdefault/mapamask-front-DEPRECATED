@@ -10,6 +10,12 @@ input, textarea{
     width: 50%;
 }
 
+#map { 
+    height: 500px; 
+    width: 70%;
+    margin-top: 70px;
+}
+
 @media (max-width: 1150px){
     .register-container{
         width: 100%;

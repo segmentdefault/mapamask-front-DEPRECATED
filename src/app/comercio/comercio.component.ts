@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Comercio } from '../interfaces/comercio.inteface';
+import { Business } from '../interfaces/business.inteface';
+import { BusinessService } from '../services/business.service';
 
 @Component({
   selector: 'app-comercio',
@@ -9,8 +10,9 @@ import { Comercio } from '../interfaces/comercio.inteface';
 })
 export class ComercioComponent implements OnInit {
 
-  comercioId: number = this.route.snapshot.params['id'];
-  comercio: Comercio = {
+  error: string = "";
+  businessId: number = this.route.snapshot.params['id'];
+  business: Business = {
       id: 0,
       name: "",
       image: "",
@@ -27,14 +29,15 @@ export class ComercioComponent implements OnInit {
   }
   
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private businessService: BusinessService
   ) { }
 
   ngOnInit(): void {
-    let comercio: string | null = localStorage.getItem('comercio');
-    
-    if(comercio){
-      this.comercio = JSON.parse(comercio);
+    if(this.businessService.getBusinessById(this.businessId).id != 0){
+      this.business = this.businessService.getBusinessById(this.businessId);
+    } else {
+      this.error = "Business not found";
     }
   }
 

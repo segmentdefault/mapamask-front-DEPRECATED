@@ -11,12 +11,23 @@ a{
     text-decoration: none;
 }
 
+.container{
+    width: 80%;
+}
+
+.background{
+    width: 100%;
+    background-color: #f7911d;
+    padding: 5px 0 50px 0;
+    margin: 10px 0 0 0;
+}
+
 input, select{
     width: 100%;
 }
 
 .search-btn{
-    width: 100%;
+    width: 60%;
 }
 
 #map { 
@@ -38,7 +49,7 @@ input, select{
     cursor: pointer;
     
     h3{
-        font-size: 2.5vw;
+        font-size: 2vw;
         margin-bottom: 0;
     }
 
@@ -47,7 +58,7 @@ input, select{
     }
 
     p{
-        font-size: 1.5vw;
+        font-size: 1vw;
         margin-bottom: 0;
     }
 
@@ -74,6 +85,16 @@ input, select{
     }
 }
 
+@media (max-width: 1000px){
+    .container{
+        width: 100%;
+    }
+
+    .result{
+        width: 100%;
+    }
+}
+
 @media (max-width: 768px){
     input, button, select{
         margin-top: 10px;
@@ -93,6 +114,14 @@ input, select{
 }
 
 @media (max-width: 465px){
+    #map { 
+        width: 100%;
+    }
+
+    .info{
+        margin-left: 20px;
+    }
+
     .result{
         width: 98%;
 

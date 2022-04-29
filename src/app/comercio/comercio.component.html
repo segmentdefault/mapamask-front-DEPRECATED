@@ -1,19 +1,38 @@
+<h1 *ngIf="error" class="alert alert-danger center mt-5">{{ error }}</h1>
 
-<div class="container">
+<div class="container mt-5" *ngIf="business && !error">
     <div class="row">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="comercio">
-            <img [src]="comercio.image" alt="">
-            <h1>{{ comercio.name }}</h1><p>{{ comercio.puntuacion }}<i class="fa-solid fa-star star"></i></p>
-            <h4>{{ comercio.job }}</h4>
-            <p>{{ comercio.description }}</p>
-            <h3>Datos personales</h3>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <img class="business-img" [src]="business.image" alt="">
+        </div>
+
+        <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+            <h1>{{ business.name }}</h1>
+            <h4 class="job">{{ business.job }}</h4>
+        </div>
+
+        <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12">
+            <p class="rating">{{ business.puntuacion }}<i class="fa-solid fa-star fa-md star"></i></p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <p class="description">{{ business.description }}</p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <h3>Más información:</h3>
             <ul>
-                <li>{{ comercio.city }}</li>
-                <li>{{ comercio.email }}</li>
-                <li>{{ comercio.phone }}</li>
-                <li>{{ comercio.web }}</li>
-                <li>{{ comercio.sector }}</li>
+                <li>{{ business.city }}</li>
+                <li>{{ business.email }}</li>
+                <li>{{ business.phone }}</li>
+                <li>{{ business.web }}</li>
+                <li>{{ business.sector }}</li>
             </ul>
         </div>
     </div>
+    
 </div>
