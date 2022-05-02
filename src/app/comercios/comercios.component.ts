@@ -222,6 +222,11 @@ export class ComerciosComponent implements OnInit {
 
     Jawg_Sunny.addTo(this.map);
 
+    var metamaskIcon = L.icon({
+      iconUrl: '../../assets/img/metamask-marker.png',
+      iconSize: [37, 47]
+    });
+
     this.business.forEach(item => {
       let popup = L.popup({
         closeButton: false
@@ -241,7 +246,7 @@ export class ComerciosComponent implements OnInit {
           href='comercio/${item.id}' target='_blank'>Ver ficha</a>
       `);
 
-      let marker = L.marker([parseFloat(item.latitude), parseFloat(item.longitude)]).bindPopup(popup).openPopup();
+      let marker = L.marker([parseFloat(item.latitude), parseFloat(item.longitude)],{icon: metamaskIcon}).bindPopup(popup).openPopup();
 
       marker.addTo(this.map);
     });
