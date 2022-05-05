@@ -243,7 +243,7 @@ export class ComerciosComponent implements OnInit {
           color: #ffffff;
           padding: 10px;
           text-decoration: none;"
-          href='comercio/${item.id}' target='_blank'>Ver ficha</a>
+          href='/comercio/${item.id}' target='_blank'>Ver ficha</a>
       `);
 
       let marker = L.marker([parseFloat(item.latitude), parseFloat(item.longitude)],{icon: metamaskIcon}).bindPopup(popup).openPopup();
