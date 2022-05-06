@@ -224,7 +224,7 @@ export class ComerciosComponent implements OnInit {
 
     var metamaskIcon = L.icon({
       iconUrl: '../../assets/img/metamask-marker.png',
-      iconSize: [37, 47]
+      iconSize: [45, 47]
     });
 
     this.business.forEach(item => {
