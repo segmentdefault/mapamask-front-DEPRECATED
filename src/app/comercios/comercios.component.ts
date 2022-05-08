@@ -21,7 +21,7 @@ export class ComerciosComponent implements OnInit {
 
   businessSearch: Array<Business> = [];
 
-  cityInput: string = "";
+  cityInput: string = "Ciudad…";
   sectorInput: string = "Sector…";
   keywordInput: string = "";
 
@@ -53,7 +53,7 @@ export class ComerciosComponent implements OnInit {
     this.businessSearch = [];
     this.searchLoading = true;
     
-    if(!city && sector == "Sector…" && !keyword){
+    if(city == "Ciudad…" && sector == "Sector…" && !keyword){
       this.businessSearch = []
 
       document.getElementById("map")!.style.display = "flex";
@@ -67,7 +67,7 @@ export class ComerciosComponent implements OnInit {
           }
         }
   
-        if(!city && sector && !keyword){
+        if(city == "Ciudad…" && sector && !keyword){
           if(item.sector.toLowerCase() == sector.toLowerCase()){
             this.businessSearch.push(item);
           }
@@ -79,7 +79,7 @@ export class ComerciosComponent implements OnInit {
           }
         }
   
-        if(!city && sector == "Sector…" && keyword){
+        if(city == "Ciudad…" && sector == "Sector…" && keyword){
           let descriptionArray = item.description.split(" ");
           let nameArray = item.name.split(" ");
           let jobArray = item.job.split(" ");
@@ -130,7 +130,7 @@ export class ComerciosComponent implements OnInit {
           }
         }
   
-        if(!city && sector && keyword){
+        if(city == "Ciudad…" && sector && keyword){
   
           if(item.sector.toLowerCase() == sector.toLowerCase()){
             let descriptionArray = item.description.split(" ");

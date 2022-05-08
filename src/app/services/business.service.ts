@@ -18,7 +18,7 @@ export class BusinessService {
       job: "Desarrollador web",
       latitude: "40.038272",
       longitude: "0.045783",
-      city: "Castellon",
+      city: "Castellón",
       web: "https://www.cryptospace.es",
       puntuacion: 5
     },
@@ -48,7 +48,7 @@ export class BusinessService {
       job: "Panadería/Pastelería",
       latitude: "39.9815509",
       longitude: "-0.0354668",
-      city: "castellon",
+      city: "Castellón",
       web: "https://www.cryptospace.es",
       puntuacion: 4
     },
@@ -63,7 +63,7 @@ export class BusinessService {
       job: "Comidas preparadas",
       latitude: "39.9808094",
       longitude: "-0.0333288",
-      city: "Castellon",
+      city: "Castellón",
       web: "https://www.cryptospace.es",
       puntuacion: 3
     }
