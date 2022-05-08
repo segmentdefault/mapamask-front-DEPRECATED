@@ -3,7 +3,9 @@ import { Router } from '@angular/router';
 import { Business } from '../interfaces/business.inteface';
 import * as L  from 'leaflet';
 import { BusinessService } from '../services/business.service';
-import { preventOverflow } from '@popperjs/core';
+
+import municipiosList from '../../assets/data/municipios.json';
+import provinciasList from '../../assets/data/provincias.json';
 @Component({
   selector: 'app-comercios',
   templateUrl: './comercios.component.html',
@@ -23,7 +25,11 @@ export class ComerciosComponent implements OnInit {
 
   cityInput: string = "Ciudad…";
   sectorInput: string = "Sector…";
+  villageInput: string = "Pueblo…";
   keywordInput: string = "";
+
+  villagesData: any = municipiosList;
+  citiesData: any = provinciasList;
 
   searchLoading: boolean = false;
 

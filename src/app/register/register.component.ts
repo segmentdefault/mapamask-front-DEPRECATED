@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as L  from 'leaflet';
-import { AnonymousSubject } from 'rxjs/internal/Subject';
+
+import municipiosList from '../../assets/data/municipios.json';
+import provinciasList from '../../assets/data/provincias.json';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -22,8 +24,11 @@ export class RegisterComponent implements OnInit {
   number: string = "6";
   street: string = "albors";
   cp: string = "12560";
-  city: string = "benicasim";
+  city: string = "Ciudad…";
   country: string = "españa";
+
+  villagesData: any = municipiosList;
+  citiesData: any = provinciasList;
 
   constructor() { }
 
