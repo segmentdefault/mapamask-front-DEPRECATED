@@ -86,8 +86,8 @@
 
     <div class="row mt-3">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center" *ngFor="let business of businessSearch">
-            <div class="row mt-4 result" [routerLink]="['/comercio', business.id]" >
-                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3">
+            <div class="row mt-2 result" [routerLink]="['/comercio', business.id]" >
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2" style="padding: 0;">
                     <img [src]="business.image" alt="">
                 </div>
                 <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-9">
@@ -95,7 +95,7 @@
                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10" style="padding-left: 20px;">
                             <h3>{{ business.name }}</h3>
                         </div>
-                        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 end">
+                        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 end" style="padding: 0;">
                             <p>{{ business.puntuacion }}<i class="fa-solid fa-star star"></i></p>
                         </div>
                     </div>
@@ -103,9 +103,9 @@
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="padding-left: 20px;">
                             <p>{{ business.job }}</p>
                             <hr>
-                            <p>Web: <a [href]="business.web" target="_blank">{{ business.web }}</a></p>
-                            <p>Teléfono: {{ business.phone }}</p>
-                            <p>Email: {{ business.email }}</p>
+                            <p><a [href]="business.web" target="_blank">{{ business.web }}</a></p>
+                            <p>{{ business.phone }}</p>
+                            <p>{{ business.email }}</p>
                         </div>
                     </div>
                 </div>

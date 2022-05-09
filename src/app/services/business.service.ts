@@ -40,7 +40,7 @@ export class BusinessService {
     {
       id: 3,
       name: "Panaderia/pastelería Juan Bello",
-      image: "../../assets/img/metamask-mapamask.jpg",
+      image: "../../assets/img/pasteleria.png",
       email: "juanBello@cryptospace.es",
       phone: "6668777888",
       description: "La mejor panadería/pastelería de castellon",
@@ -55,7 +55,7 @@ export class BusinessService {
     {
       id: 4,
       name: "Santa comida",
-      image: "../../assets/img/metamask-mapamask.jpg",
+      image: "../../assets/img/santa-comida.png",
       email: "santacomida@cryptospace.es",
       phone: "656748839",
       description: "Local de comidas preparadas en Castellón",
