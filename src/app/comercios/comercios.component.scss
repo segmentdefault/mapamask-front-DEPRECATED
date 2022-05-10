@@ -33,11 +33,11 @@ input, select{
 #map { 
     height: 500px; 
     width: 70%;
-    margin-top: 70px;
+    margin-top: 50px;
 }
 
 .alert{
-    width: 70%;
+    width: 90%;
     text-align: center;
 }
 
@@ -115,6 +115,11 @@ input, select{
 @media (max-width: 465px){
     #map { 
         width: 100%;
+        margin: 0;
+    }
+
+    .container{
+        padding: 0;
     }
 
     .info{

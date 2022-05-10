@@ -33,7 +33,7 @@ export class ComerciosComponent implements OnInit {
 
   searchLoading: boolean = false;
 
-  info: string = "Aplica filtros para optimizar tu búsqueda, también puedes buscar sin usar ningún filtro y te mostraremos todos los negocios que se han dado de alta en nuestra plataforma";
+  info: string = "Aplica filtros para optimizar tu búsqueda, también puedes buscar sin usar ningún filtro y te mostraremos todos los negocios";
   error: string = "";
 
   constructor(

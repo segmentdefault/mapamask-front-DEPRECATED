@@ -62,19 +62,19 @@
 </div>
 
 <div class="container">
-    <div class="row mt-5"*ngIf="searchLoading">
+    <div class="row mt-3"*ngIf="searchLoading">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <h6>Loading…</h6>
         </div>
     </div>
     
-    <div class="row mt-5" *ngIf="info != ''">
+    <!-- <div class="row mt-3" *ngIf="info != ''">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
             <h6 class="alert alert-warning" role="alert">{{ info }}</h6>
         </div>
-    </div>
+    </div> -->
     
-    <div class="row mt-5" *ngIf="error != ''">
+    <div class="row mt-3" *ngIf="error != ''">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
             <h6 class="alert alert-danger" role="alert">{{ error }}</h6>
         </div>
