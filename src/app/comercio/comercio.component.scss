@@ -7,7 +7,17 @@
 }
 
 .business-img{
-    width: 100%;
+    width: 40%;
+}
+
+.title{
+    color: #804517;
+}
+
+hr{
+    border: 3px solid #f7911d;
+    border-radius: 5px;
+    opacity: 1;
 }
 
 .job{
@@ -16,4 +26,16 @@
 
 .description{
     font-size: x-large;
+    margin: -5px 0 0 15px;
+}
+
+@media (max-width: 500px){
+    .business-img{
+        width: 100%;
+    }
+
+    .rating{
+        margin-top: 4px;
+        font-size: large;
+    }
 }
