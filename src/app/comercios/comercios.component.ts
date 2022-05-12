@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Business } from '../interfaces/business.inteface';
 import * as L  from 'leaflet';
 import { BusinessService } from '../services/business.service';
 
 import municipiosList from '../../assets/data/municipios.json';
 import provinciasList from '../../assets/data/provincias.json';
+import sectoresList from '../../assets/data/sectores.json';
 @Component({
   selector: 'app-comercios',
   templateUrl: './comercios.component.html',
@@ -15,13 +15,19 @@ import provinciasList from '../../assets/data/provincias.json';
 export class ComerciosComponent implements OnInit {
   width: any;
 
-  business: Array<Business> = [];
+  business: any;
+  totalPages: number = 0;
+  actualPage: number = 1;
 
+  mapView: boolean = true;
+  listView: boolean = false;
+
+  markers: Array<any> = [];
   map: any;
   currentLatitude: string | null = "";
   currentLongitude: string | null = "";
 
-  businessSearch: Array<Business> = [];
+  businessSearch: any;
 
   cityInput: string = "Ciudad…";
   sectorInput: string = "Sector…";
@@ -30,6 +36,7 @@ export class ComerciosComponent implements OnInit {
 
   villagesData: any = municipiosList;
   citiesData: any = provinciasList;
+  sectorsData: any = sectoresList;
 
   searchLoading: boolean = false;
 
@@ -43,14 +50,84 @@ export class ComerciosComponent implements OnInit {
 
   ngOnInit(): void {
     this.width = window.screen.width;
-    this.business = this.businessService.business;
+    
+    this.mapView = true;
+    this.listView = false;
+
     /* this.currentLatitude = localStorage.getItem('currentLatitude');
     this.currentLongitude = localStorage.getItem('currentLongitude'); */
+
     this.setMap();
+    console.log(this.actualPage);
+  }
+
+  async getInitialBusiness(){
+    let businessPage = (await this.businessService.getBusinessByPage(1));
+    this.business = businessPage.business;
+    this.totalPages = businessPage.totalPages;
   }
 
   openRegister(){
     this.router.navigate(['/registro']);
+  }
+
+  async nextPage(){
+    let businessPage
+
+    if(this.actualPage + 1 <= this.totalPages){
+      let nextPage = this.actualPage + 1;
+      this.actualPage = nextPage;
+      console.log(nextPage);
+      businessPage = (await this.businessService.getBusinessByPage(nextPage));
+      this.totalPages = businessPage.totalPages;
+      this.business = businessPage.business;
+
+      this.removeMarkers();
+      this.setMarkers();
+    }
+  }
+
+  async previousPage(){
+    let businessPage
+
+    if(this.actualPage - 1 > 0){
+      let previousPage = this.actualPage - 1;
+      this.actualPage = previousPage;
+      console.log(previousPage);
+      businessPage = (await this.businessService.getBusinessByPage(previousPage));
+      this.totalPages = businessPage.totalPages;
+      this.business = businessPage.business; 
+      this.removeMarkers();
+      this.setMarkers();
+    }
+  }
+
+  async goPage(page: number){
+    this.searchLoading = true;
+
+    this.actualPage = page;
+    let businessPage = (await this.businessService.getBusinessByPage(page));
+    this.totalPages = businessPage.totalPages;
+    this.business = businessPage.business;
+
+    this.removeMarkers();
+    this.setMarkers();
+
+    this.searchLoading = false;
+  }
+
+  viewInList(){
+    console.log(this.business, this.totalPages);
+    this.listView = true;
+    this.mapView = false;
+    document.getElementById("map")!.style.display = 'none';
+  }
+
+  viewInMap(){
+    console.log(this.business, this.totalPages);
+    this.listView = false;
+    this.mapView = true;
+    document.getElementById("map")!.style.display = 'flex';
   }
 
   searchBusiness(city?: string, keyword?: string, sector?: string){
@@ -59,7 +136,7 @@ export class ComerciosComponent implements OnInit {
     this.businessSearch = [];
     this.searchLoading = true;
     
-    if(city == "Ciudad…" && sector == "Sector…" && !keyword){
+    /* if(city == "Ciudad…" && sector == "Sector…" && !keyword){
       this.businessSearch = []
 
       document.getElementById("map")!.style.display = "flex";
@@ -205,18 +282,24 @@ export class ComerciosComponent implements OnInit {
       if(this.businessSearch.length == 0){
         this.error = "No se encontraron resultados";
       }
-    }
+    } */
     
     this.searchLoading = false;
   }
 
-  setMap(){
+  async setMap(){
    /*  if(this.currentLatitude && this.currentLongitude){
       this.map = L.map('map').setView([parseFloat(this.currentLatitude), parseFloat(this.currentLongitude)], 13);
     } else {
       this.map = L.map('map').setView([40.0619668, -2.1830444], 6);
     } */
-    
+
+    if(this.markers.length > 0){
+      this.removeMarkers();
+    }
+
+    await this.getInitialBusiness();
+
     this.map = L.map('map').setView([40.0619668, -2.1830444], 6);
     var Jawg_Sunny = L.tileLayer('https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
       attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> | <a href="https://www.cryptospace.es" target="_blank">CryptoSpace</a> contributors',
@@ -228,19 +311,23 @@ export class ComerciosComponent implements OnInit {
 
     Jawg_Sunny.addTo(this.map);
 
+    this.setMarkers();
+  }
+
+  setMarkers(){
     var metamaskIcon = L.icon({
       iconUrl: '../../assets/img/metamask-marker.png',
       iconSize: [45, 47]
     });
 
-    this.business.forEach(item => {
+    this.business.forEach((item: { name: any; job: any; id: any; latitude: string; longitude: string; }) => {
       let popup = L.popup({
         closeButton: false
       }).setContent(`
         <p style="
           font-weight: bold;
           color: rgb(0, 0, 0);
-          font-family: 'Montserrat';">${item.name}, ${item.job}
+          font-family: 'Montserrat';">${item.name}, ${item.job}, ${item.id}
         </p>
         <a style="
           border-radius: 10px;
@@ -253,9 +340,22 @@ export class ComerciosComponent implements OnInit {
       `);
 
       let marker = L.marker([parseFloat(item.latitude), parseFloat(item.longitude)],{icon: metamaskIcon}).bindPopup(popup).openPopup();
+      this.markers.push(marker);
 
       marker.addTo(this.map);
     });
+  }
+
+  removeMarkers(){
+    this.markers.forEach((marker) => {
+      this.map.removeLayer(marker);
+    });
+
+    this.markers = [];
+  }
+
+  counter(i: number) {
+    return new Array(i);
   }
 }
 

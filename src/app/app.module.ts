@@ -10,6 +10,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { RegisterComponent } from './register/register.component';
 import { ComercioComponent } from './comercio/comercio.component';
+import { ModalComponent } from './modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ComercioComponent } from './comercio/comercio.component';
     TutorialComponent,
     MetamaskComponent,
     RegisterComponent,
-    ComercioComponent
+    ComercioComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import * as L  from 'leaflet';
+import { Subscription } from 'rxjs';
 
 import municipiosList from '../../assets/data/municipios.json';
 import provinciasList from '../../assets/data/provincias.json';
+import sectoresList from '../../assets/data/sectores.json';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -29,7 +31,12 @@ export class RegisterComponent implements OnInit {
 
   villagesData: any = municipiosList;
   citiesData: any = provinciasList;
+  sectorsData: any = sectoresList;
 
+  @ViewChild('modal', { read: ViewContainerRef })
+  entry!: ViewContainerRef;
+  sub!: Subscription;
+  
   constructor() { }
 
   ngOnInit(): void {
@@ -38,8 +45,39 @@ export class RegisterComponent implements OnInit {
     this.setMap();
   }
 
+  ngOnDestroy(): void {
+    if (this.sub) this.sub.unsubscribe();
+  }
+
   sendRegisterRequest(){
     
+  }
+
+  async fillBBDD(){
+    let API_URL = "http://localhost:8080/api/business/addBusiness";
+    for (let i = 100; i < 400; i++) {
+      let _datos = {
+        "id": i,
+        "name": "Santa comida",
+        "images": ["../../assets/img/metamask-mapamask.jpg"],
+        "email": "santacomida@cryptospace.es",
+        "phone": "656748839",
+        "description": "Local de comidas preparadas en castellón",
+        "sector": "ocioRestauracion",
+        "job": "Comidas preparadas",
+        "latitude": "39.9808094",
+        "longitude": "-0.0333288",
+        "city": "Castellon",
+        "web": "https://www.cryptospace.es",
+        "rating": 3
+      }
+
+      await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify(_datos),
+        headers: {"Content-type": "application/json; charset=UTF-8"}
+      })
+    }
   }
 
   async showAtMap(number: string, street: string, cp: string, city: string, country: string){
@@ -74,6 +112,9 @@ export class RegisterComponent implements OnInit {
         font-weight: bold;
         color: rgb(0, 0, 0);
         font-family: 'Montserrat';">Your location!
+      </p>
+      <p>
+        ${latitude}, ${longitude}
       </p>
     `).openPopup();
 

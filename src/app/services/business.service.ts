@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 import { Business } from '../interfaces/business.inteface';
 
 @Injectable({
@@ -71,8 +72,13 @@ export class BusinessService {
 
   constructor() { }
 
-  async getBusiness(){
-    //CALL TO BBDD ANF GET LIST OF ALL BUSINESS
+  async getBusinessByPage(page: number){
+    let paginationEndpoint = environment.API_URL + "page?page="+page;
+
+    let res = (await fetch(paginationEndpoint));
+    let data = await res.json();
+    
+    return data;
   }
 
   getBusinessById(id: number): Business{

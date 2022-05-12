@@ -30,7 +30,7 @@ input, select{
 #map { 
     height: 500px; 
     width: 70%;
-    margin-top: 50px;
+    margin-top: 30px;
 }
 
 .alert{
@@ -79,6 +79,21 @@ input, select{
     .star{
         color: #f7911d;
     }
+}
+
+.after{
+    width: 20px;
+}
+
+.before{
+    width: 20px;
+}
+
+.pagination-item{
+    border: 1px solid #f7911d;
+    border-radius: 5px;
+    background-color: #ffffff;
+    padding: 5px;
 }
 
 @media (max-width: 1000px){

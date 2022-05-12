@@ -17,13 +17,13 @@
   <div class="container form-container">
     <div class="row">
       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-5">
-          <input [(ngModel)]="name" type="text" placeholder="Nombre">
+          <input [(ngModel)]="name" type="text" placeholder="Nombre*">
       </div>
     </div>
   
     <div class="row">
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 end mt-3">
-        <input [(ngModel)]="email" type="text" placeholder="Correo">
+        <input [(ngModel)]="email" type="text" placeholder="Correo*">
       </div>
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 start mt-3">
           <input [(ngModel)]="phone" type="text" placeholder="Teléfono">
@@ -32,7 +32,7 @@
   
     <div class="row">
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 end mt-3">
-        <input [(ngModel)]="sector" type="text" placeholder="Sector">
+        <button class="mapamask-btn-white" style="width: 100%;" data-bs-toggle="modal" data-bs-target="#selectSectorModal">Selecciona tus sectores…*</button>
       </div>
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 start mt-3">
           <input [(ngModel)]="job" type="text" placeholder="Trabajo">
@@ -71,7 +71,7 @@
     
     <div class="row">
       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
-        <textarea [(ngModel)]="description" placeholder="Descripción"></textarea>
+        <textarea [(ngModel)]="description" placeholder="Descripción*"></textarea>
       </div>
     </div>
   
@@ -85,6 +85,7 @@
       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
         <button class="mapamask-btn" (click)="sendRegisterRequest()">Enviar</button>
         <button class="mapamask-btn" (click)="showAtMap(number, street, cp, city, country)">Comprobar dirección</button>
+        <button (click)="fillBBDD()">click me!</button>
       </div>
     </div>
   </div>
@@ -92,4 +93,32 @@
 
 <div class="center">
   <div id="map"></div>
+</div>
+
+<!-- SECTOR SELECTION MODAL -->
+<div class="modal fade" id="selectSectorModal" tabindex="-1" role="dialog" aria-labelledby="selectSectorModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Selecciona los posibles sectores relacionados con tu negocio</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-6" *ngFor="let sector of sectorsData">
+            <div class="checkbox">
+              <label class="checkbox-wrapper">
+                <input type="checkbox" class="checkbox-input" />
+                <span class="checkbox-tile">
+                  <span class="checkbox-label">{{sector.name}}</span>
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+      </div>
+    </div>
+  </div>
 </div>
