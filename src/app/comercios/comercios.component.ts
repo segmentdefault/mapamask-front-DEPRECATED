@@ -58,13 +58,13 @@ export class ComerciosComponent implements OnInit {
     this.currentLongitude = localStorage.getItem('currentLongitude'); */
 
     this.setMap();
-    console.log(this.actualPage);
   }
 
   async getInitialBusiness(){
-    let businessPage = (await this.businessService.getBusinessByPage(1));
+    /* let businessPage = (await this.businessService.getBusinessByPage(1));
     this.business = businessPage.business;
-    this.totalPages = businessPage.totalPages;
+    this.totalPages = businessPage.totalPages; */
+    this.business = this.businessService.business;
   }
 
   openRegister(){
@@ -72,7 +72,7 @@ export class ComerciosComponent implements OnInit {
   }
 
   async nextPage(){
-    let businessPage
+    /* let businessPage
 
     if(this.actualPage + 1 <= this.totalPages){
       let nextPage = this.actualPage + 1;
@@ -84,11 +84,11 @@ export class ComerciosComponent implements OnInit {
 
       this.removeMarkers();
       this.setMarkers();
-    }
+    } */
   }
 
   async previousPage(){
-    let businessPage
+    /* let businessPage
 
     if(this.actualPage - 1 > 0){
       let previousPage = this.actualPage - 1;
@@ -99,11 +99,11 @@ export class ComerciosComponent implements OnInit {
       this.business = businessPage.business; 
       this.removeMarkers();
       this.setMarkers();
-    }
+    } */
   }
 
   async goPage(page: number){
-    this.searchLoading = true;
+    /* this.searchLoading = true;
 
     this.actualPage = page;
     let businessPage = (await this.businessService.getBusinessByPage(page));
@@ -113,18 +113,16 @@ export class ComerciosComponent implements OnInit {
     this.removeMarkers();
     this.setMarkers();
 
-    this.searchLoading = false;
+    this.searchLoading = false; */
   }
 
   viewInList(){
-    console.log(this.business, this.totalPages);
     this.listView = true;
     this.mapView = false;
     document.getElementById("map")!.style.display = 'none';
   }
 
   viewInMap(){
-    console.log(this.business, this.totalPages);
     this.listView = false;
     this.mapView = true;
     document.getElementById("map")!.style.display = 'flex';
