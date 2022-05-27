@@ -1,9 +1,9 @@
 [
   {
     "COD_PROV": "01",
-    "provincia": "Araba/Álava",
+    "provincia": "Álava",
     "COD_CA": 16,
-    "COMUNIDAD_AUTONOMA": "País Vasco/Euskadi",
+    "COMUNIDAD_AUTONOMA": "País Vasco",
     "CAPITAL": "Vitoria-Gasteiz"
   },
   {
@@ -15,7 +15,7 @@
   },
   {
     "COD_PROV": "03",
-    "provincia": "Alacant/Alicante",
+    "provincia": "Alicante",
     "COD_CA": 10,
     "COMUNIDAD_AUTONOMA": "Comunitat Valenciana",
     "CAPITAL": "Alacant/Alicante"
@@ -78,7 +78,7 @@
   },
   {
     "COD_PROV": 12,
-    "provincia": "Castelló/Castellón",
+    "provincia": "Castellón",
     "COD_CA": 10,
     "COMUNIDAD_AUTONOMA": "Comunitat Valenciana",
     "CAPITAL": "Castelló de la Plana"

@@ -54,6 +54,16 @@ body, html{
     justify-content: flex-start;
 }
 
+.center-vertically{
+    display: flex;
+    align-items: center;
+}
+
+.end-vertically{
+    display: flex;
+    align-items: flex-end;
+}
+
 .background{
     width: 100%;
     background-color: #f7911d;

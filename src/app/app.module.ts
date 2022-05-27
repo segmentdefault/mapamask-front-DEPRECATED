@@ -10,7 +10,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { RegisterComponent } from './register/register.component';
 import { ComercioComponent } from './comercio/comercio.component';
-import { ModalComponent } from './modal/modal.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
@@ -22,8 +21,7 @@ import { environment } from '../environments/environment';
     TutorialComponent,
     MetamaskComponent,
     RegisterComponent,
-    ComercioComponent,
-    ModalComponent
+    ComercioComponent
   ],
   imports: [
     BrowserModule,

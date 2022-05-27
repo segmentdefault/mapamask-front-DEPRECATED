@@ -1,15 +1,18 @@
 export interface Business{
+    distance: number;
     id: number,
     name: string,
-    image: string,
+    images: string[],
     email: string,
     phone: string,
     description: string,
-    sector: string,
+    sectors: string[],
     job: string,
     latitude: string,
     longitude: string,
     city: string,
+    country: string,
     web: string,
-    puntuacion: number
+    rating: number,
+    online: boolean
 }

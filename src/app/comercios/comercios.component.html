@@ -2,46 +2,43 @@
     <div class="container">
         <div class="row mt-5">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 info">
-                <h1 class="title">¿Quieres cobrar/pagar con cryptos?</h1>
+                <h1 class="title">¡Bienvenido a Mapamask!</h1>
             </div>
         </div>
+
         <div class="row mt-2">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 info">
-                <h1 class="subtitle">¡Da de alta tu negocio!</h1>
+                <h1 class="subtitle">El buscador de negocios que aceptan cryptos</h1>
             </div>
         </div>
+
         <div class="row mt-3">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 info">
-                <p class="">Tu plataforma donde explorar los comercios que aceptan criptomonedas.</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 info">
-                <button (click)="openRegister()" class="mapamask-btn mt-3">Darse de alta</button>
+                <p class="">Empieza a usar tus criptomonedas en el mundo real.</p>
             </div>
         </div>
     
-        <div class="row mt-5 center">
-            <div class="col-xl-2 col-lg-2 col-md-3 col-sm-12-col-12" [ngClass]="width >= 768 ? 'end' : 'center'">
+        <div class="row mt-5">
+            <!-- <div class="col-xl-2 col-lg-2 col-md-3 col-sm-12-col-12" [ngClass]="width >= 768 ? 'end' : 'center'">
                 <select [(ngModel)]="cityInput" placeholder="Provincia" type="text" class="search-input" style="width: 90%;">
                     <option selected>Ciudad…</option>
                     <option *ngFor="let city of citiesData" [value]="city.provincia">{{ city.provincia }}</option>
                 </select>
-            </div>
+            </div> -->
         
-            <div class="col-xl-6 col-lg-6 col-md-3 col-sm-12-col-12 center">
+            <div class="col-xl-5 col-lg-5 col-md-3 col-sm-12-col-12" [ngClass]="width >= 768 ? 'start' : 'center'">
                 <select [(ngModel)]="sectorInput" name="sector" id="sector" class="search-input" style="width: 90%;">
                     <option selected>Sector…</option>
                     <option *ngFor="let sector of sectorsData" [value]="sector.name">{{sector.name}}</option>
                 </select>
             </div>
         
-            <div class="col-xl-2 col-lg-2 col-md-3 col-sm-12-col-12 center">
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12-col-12" [ngClass]="width >= 768 ? 'start' : 'center'">
                 <input [(ngModel)]="keywordInput" placeholder="Palabra clave" type="text" class="search-input" style="width: 90%;">
             </div>
         
             <div class="col-xl-2 col-lg-2 col-md-3 col-sm-12-col-12" [ngClass]="width >= 768 ? 'start' : 'center'">
-                <button (click)="searchBusiness(cityInput, keywordInput, sectorInput)" class="mapamask-btn search-btn">Buscar</button>
+                <button (click)="searchBusiness(keywordInput, sectorInput)" class="mapamask-btn search-btn">Buscar</button>
             </div>
             
         </div>
@@ -58,9 +55,9 @@
 </div>
 
 <div class="container">
-    <div class="row mt-3"*ngIf="searchLoading">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-            <h6>Loading…</h6>
+    <div *ngIf="searchLoading" class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
+            <h3 class="alert alert-warning mt-3" style="width: 40%;">Loading…</h3>
         </div>
     </div>
     
@@ -78,10 +75,10 @@
 
     <div class="row mt-3">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center" *ngIf="mapView">
-            <button class="btn btn-outline-warning" (click)="viewInList()">View in list</button>
+            <button *ngIf="!searchLoading" class="btn btn-outline-warning" (click)="viewInList()">View in list</button>
         </div>
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center" *ngIf="listView">
-            <button class="btn btn-outline-warning" (click)="viewInMap()">View in map</button>
+            <button *ngIf="!searchLoading" class="btn btn-outline-warning" (click)="viewInMap()">View in map</button>
         </div>
     </div>
 
@@ -92,25 +89,32 @@
     </div>
 
     <div *ngIf="listView" class="row mt-3">
-        <div *ngIf="searchLoading" class="row">
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
-                <h3 class="btn btn-outline-warning">Loading…</h3>
-            </div>
-        </div>
-
         <ng-container *ngIf="!searchLoading">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center" *ngFor="let businessItem of business">
-                <div class="row mt-2 result" [routerLink]="['/comercio', businessItem.id]" >
+                <div class="row mt-2 result"><!-- [routerLink]="['/comercio', businessItem.id]" -->
                     <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2" style="padding: 0;">
-                        <img [src]="businessItem.images[0]" alt="">
+
+                        <ng-container *ngIf="businessItem.images[0]; else noImage">
+                            <img class="business-img" [src]="businessItem.images[0]" alt="">
+                        </ng-container>
+
+                        <ng-template #noImage>
+                            <img class="business-img" src="../../assets/img/metamask-mapamask.jpg" alt="">
+                        </ng-template>
+                        
                     </div>
                     <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10">
                         <div class="row">
-                            <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10" style="padding-left: 20px;">
+                            <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-8" style="padding-left: 20px;">
                                 <h3>{{ businessItem.name }}</h3>
                             </div>
-                            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 end" style="padding: 0;">
-                                <p>{{ businessItem.rating }}<i class="fa-solid fa-star star"></i></p>
+                            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-2 end center-vertically" style="padding: 0;">
+                                <!-- <p>{{ businessItem.rating }}<i class="fa-solid fa-star star"></i></p> -->
+                                <a href="https://www.google.com/maps/dir/{{currentLatitude}},{{currentLongitude}}/{{businessItem.latitude}},{{businessItem.longitude}}" target="_blank"><i class="fa-solid fa-diamond-turn-right fa-xl"></i></a>
+                            </div>
+                            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-2 end center-vertically" style="padding: 0;">
+                                <!-- <p>{{ businessItem.rating }}<i class="fa-solid fa-star star"></i></p> -->
+                                <a href="https://www.google.com/search?q={{businessItem.name}}+{{businessItem.city}}" target="_blank"><img class="google-logo" src="../../assets/img/google-logo.png" alt="google logo"></a>
                             </div>
                         </div>
                         <div class="row">
@@ -120,7 +124,7 @@
                                 <p><a [href]="businessItem.web" target="_blank">{{ businessItem.web }}</a></p>
                                 <p>{{ businessItem.phone }}</p>
                                 <p>{{ businessItem.email }}</p>
-                                <p>{{ businessItem.id }}</p>
+                                <p>{{ getDistance(businessItem.latitude, businessItem.longitude) }}Km</p>
                             </div>
                         </div>
                     </div>
@@ -128,7 +132,7 @@
             </div>
         </ng-container>
 
-        <div class="row mt-4">
+        <!-- <div class="row mt-4">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
                 <button class="btn btn-outline-warning" (click)="previousPage()">
                     <span>
@@ -149,6 +153,6 @@
                 </button>
 
             </div>
-        </div>
+        </div> -->
     </div>
 </div>

@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as L  from 'leaflet';
+import 'leaflet.markercluster';
+import 'leaflet-coordinates-control';
+/* import 'L.Control.Coordinates.css'; */
 import { BusinessService } from '../services/business.service';
 
 import municipiosList from '../../assets/data/municipios.json';
 import provinciasList from '../../assets/data/provincias.json';
 import sectoresList from '../../assets/data/sectores.json';
+import { UtilsService } from '../services/utils.service';
+import { Business } from '../interfaces/business.inteface';
 @Component({
   selector: 'app-comercios',
   templateUrl: './comercios.component.html',
@@ -15,7 +20,7 @@ import sectoresList from '../../assets/data/sectores.json';
 export class ComerciosComponent implements OnInit {
   width: any;
 
-  business: any;
+  business: Array<Business> = [];
   totalPages: number = 0;
   actualPage: number = 1;
 
@@ -23,6 +28,7 @@ export class ComerciosComponent implements OnInit {
   listView: boolean = false;
 
   markers: Array<any> = [];
+  markerCluster: any;
   map: any;
   currentLatitude: string | null = "";
   currentLongitude: string | null = "";
@@ -38,72 +44,82 @@ export class ComerciosComponent implements OnInit {
   citiesData: any = provinciasList;
   sectorsData: any = sectoresList;
 
-  searchLoading: boolean = false;
+  searchLoading: boolean = true;
 
-  info: string = "Aplica filtros para optimizar tu búsqueda, también puedes buscar sin usar ningún filtro y te mostraremos todos los negocios";
   error: string = "";
 
   constructor(
     private router: Router,
-    private businessService: BusinessService
+    private businessService: BusinessService,
+    private utils: UtilsService
   ) { }
 
   ngOnInit(): void {
     this.width = window.screen.width;
-    
+
+    this.currentLatitude = localStorage.getItem('currentLatitude');
+    this.currentLongitude = localStorage.getItem('currentLongitude');
+
     this.mapView = true;
     this.listView = false;
-
-    /* this.currentLatitude = localStorage.getItem('currentLatitude');
-    this.currentLongitude = localStorage.getItem('currentLongitude'); */
 
     this.setMap();
   }
 
-  async getInitialBusiness(){
-    /* let businessPage = (await this.businessService.getBusinessByPage(1));
-    this.business = businessPage.business;
-    this.totalPages = businessPage.totalPages; */
-    this.business = this.businessService.business;
+  async getBusiness(){
+    this.business = this.utils.getAndSaveAllDistances(await this.businessService.getAllBusiness());
+    this.orderBusinessByDistance();
   }
 
-  openRegister(){
-    this.router.navigate(['/registro']);
+  orderBusinessByDistance(){
+    this.business.sort((a: Business,b: Business) => {
+      if(a.distance < b.distance){
+        return -1;
+      }
+
+      if(a.distance > b.distance){
+        return 1;
+      }
+
+      return 0;
+    })
+  }
+
+  getDistance(lat: string, lon: string){
+    return this.utils.getDistanceBetweenCoords(parseFloat(lat), parseFloat(lon));
   }
 
   async nextPage(){
-    /* let businessPage
+    let businessPage
 
     if(this.actualPage + 1 <= this.totalPages){
       let nextPage = this.actualPage + 1;
       this.actualPage = nextPage;
-      console.log(nextPage);
       businessPage = (await this.businessService.getBusinessByPage(nextPage));
       this.totalPages = businessPage.totalPages;
       this.business = businessPage.business;
 
       this.removeMarkers();
       this.setMarkers();
-    } */
+    }
   }
 
   async previousPage(){
-    /* let businessPage
+    let businessPage
 
     if(this.actualPage - 1 > 0){
       let previousPage = this.actualPage - 1;
       this.actualPage = previousPage;
-      console.log(previousPage);
       businessPage = (await this.businessService.getBusinessByPage(previousPage));
       this.totalPages = businessPage.totalPages;
       this.business = businessPage.business; 
       this.removeMarkers();
       this.setMarkers();
-    } */
+    }
   }
 
   async goPage(page: number){
-    /* this.searchLoading = true;
+    this.searchLoading = true;
 
     this.actualPage = page;
     let businessPage = (await this.businessService.getBusinessByPage(page));
@@ -113,7 +129,7 @@ export class ComerciosComponent implements OnInit {
     this.removeMarkers();
     this.setMarkers();
 
-    this.searchLoading = false; */
+    this.searchLoading = false;
   }
 
   viewInList(){
@@ -128,175 +144,43 @@ export class ComerciosComponent implements OnInit {
     document.getElementById("map")!.style.display = 'flex';
   }
 
-  searchBusiness(city?: string, keyword?: string, sector?: string){
+  async searchBusiness(keyword?: string, sector?: string){
+    this.removeMarkers();
     this.error = "";
-    this.info = "";
-    this.businessSearch = [];
     this.searchLoading = true;
-    
-    /* if(city == "Ciudad…" && sector == "Sector…" && !keyword){
-      this.businessSearch = []
 
-      document.getElementById("map")!.style.display = "flex";
-      
+    if(sector == "Sector…" && !keyword){
+      await this.getBusiness();
+      this.setMarkers();
     } else {
-      document.getElementById("map")!.style.display = "none";
-      this.business.forEach(item => {
-        if(city && sector == "Sector…" && !keyword){
-          if(item.city.toLowerCase() == city.toLowerCase()){
-            this.businessSearch.push(item);
-          }
+      try {
+        this.business = (await this.businessService.searchBusiness(sector, keyword));
+        
+        if(this.business.length > 0){
+          this.setMarkers();
+        } else {
+          await this.getBusiness();
+          this.setMarkers();
+          this.error = "Ningún negocio coincide con la búsqueda";
         }
-  
-        if(city == "Ciudad…" && sector && !keyword){
-          if(item.sector.toLowerCase() == sector.toLowerCase()){
-            this.businessSearch.push(item);
-          }
-        }
-  
-        if(city && sector && !keyword){
-          if(item.city.toLowerCase() == city.toLowerCase() && item.sector.toLowerCase() == sector.toLowerCase()){
-            this.businessSearch.push(item);
-          }
-        }
-  
-        if(city == "Ciudad…" && sector == "Sector…" && keyword){
-          let descriptionArray = item.description.split(" ");
-          let nameArray = item.name.split(" ");
-          let jobArray = item.job.split(" ");
-  
-          descriptionArray.forEach(word =>{
-            if(word.toLowerCase() == keyword.toLowerCase()){
-              this.businessSearch.push(item);
-            }
-          });
-  
-          nameArray.forEach(word =>{
-            if(word.toLowerCase() == keyword.toLowerCase()){
-              this.businessSearch.push(item);
-            }
-          });
-  
-          jobArray.forEach(word =>{
-            if(word.toLowerCase() == keyword.toLowerCase()){
-              this.businessSearch.push(item);
-            }
-          });
-        }
-  
-        if(city && sector == "Sector…" && keyword){
-  
-          if(item.city.toLowerCase() == city.toLowerCase()){
-            let descriptionArray = item.description.split(" ");
-            let nameArray = item.name.split(" ");
-            let jobArray = item.job.split(" ");
-    
-            descriptionArray.forEach(word =>{
-              if(word.toLowerCase() == keyword.toLowerCase()){
-                this.businessSearch.push(item);
-              }
-            });
-    
-            nameArray.forEach(word =>{
-              if(word.toLowerCase() == keyword.toLowerCase()){
-                this.businessSearch.push(item);
-              }
-            });
-    
-            jobArray.forEach(word =>{
-              if(word.toLowerCase() == keyword.toLowerCase()){
-                this.businessSearch.push(item);
-              }
-            });
-          }
-        }
-  
-        if(city == "Ciudad…" && sector && keyword){
-  
-          if(item.sector.toLowerCase() == sector.toLowerCase()){
-            let descriptionArray = item.description.split(" ");
-            let nameArray = item.name.split(" ");
-            let jobArray = item.job.split(" ");
-    
-            descriptionArray.forEach(word =>{
-              if(word.toLowerCase() == keyword.toLowerCase()){
-                this.businessSearch.push(item);
-              }
-            });
-    
-            nameArray.forEach(word =>{
-              if(word.toLowerCase() == keyword.toLowerCase()){
-                this.businessSearch.push(item);
-              }
-            });
-    
-            jobArray.forEach(word =>{
-              if(word.toLowerCase() == keyword.toLowerCase()){
-                this.businessSearch.push(item);
-              }
-            });
-          }
-        }
-  
-        if(city && sector && keyword){
-  
-          if(item.sector.toLowerCase() == sector.toLowerCase() && item.city.toLowerCase() == city.toLowerCase()){
-            let descriptionArray = item.description.split(" ");
-            let nameArray = item.name.split(" ");
-            let jobArray = item.job.split(" ");
-    
-            descriptionArray.forEach(word =>{
-              if(word.toLowerCase() == keyword.toLowerCase()){
-                this.businessSearch.push(item);
-              }
-            });
-    
-            nameArray.forEach(word =>{
-              if(word.toLowerCase() == keyword.toLowerCase()){
-                this.businessSearch.push(item);
-              }
-            });
-    
-            jobArray.forEach(word =>{
-              if(word.toLowerCase() == keyword.toLowerCase()){
-                this.businessSearch.push(item);
-              }
-            });
-          }
-        }
-      });
-  
-
-      let index = 0;
-      for (let i = 0; i < this.businessSearch.length; i++) {
-        let indexTemporary = this.businessSearch[i].id;
-
-        if(this.businessSearch[i].id == index){
-          this.businessSearch.splice(i)
-        }
-        index = indexTemporary;
+        
+      } catch (error) {
+        console.log(error);
       }
-  
-      if(this.businessSearch.length == 0){
-        this.error = "No se encontraron resultados";
-      }
-    } */
-    
+    }
+
     this.searchLoading = false;
   }
 
   async setMap(){
-   /*  if(this.currentLatitude && this.currentLongitude){
-      this.map = L.map('map').setView([parseFloat(this.currentLatitude), parseFloat(this.currentLongitude)], 13);
-    } else {
-      this.map = L.map('map').setView([40.0619668, -2.1830444], 6);
-    } */
 
     if(this.markers.length > 0){
       this.removeMarkers();
     }
 
-    await this.getInitialBusiness();
+    await this.getBusiness();
+    
+    this.searchLoading = false;
 
     this.map = L.map('map').setView([40.0619668, -2.1830444], 6);
     var Jawg_Sunny = L.tileLayer('https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
@@ -313,39 +197,73 @@ export class ComerciosComponent implements OnInit {
   }
 
   setMarkers(){
+    this.markerCluster = L.markerClusterGroup();
+    let lastLat;
+    let lastLng;
     var metamaskIcon = L.icon({
       iconUrl: '../../assets/img/metamask-marker.png',
       iconSize: [45, 47]
     });
 
-    this.business.forEach((item: { name: any; job: any; id: any; latitude: string; longitude: string; }) => {
+    this.business.forEach((item: Business) => {
       let popup = L.popup({
         closeButton: false
       }).setContent(`
-        <p style="
-          font-weight: bold;
-          color: rgb(0, 0, 0);
-          font-family: 'Montserrat';">${item.name}, ${item.job}, ${item.id}
-        </p>
-        <a style="
-          border-radius: 10px;
-          border: 0;
-          background-color: #f7911d;
-          color: #ffffff;
-          padding: 10px;
-          text-decoration: none;"
-          href='/comercio/${item.id}' target='_blank'>Ver ficha</a>
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+            <h5 style="font-weight: bold; color: rgb(0, 0, 0); font-family: 'Montserrat';">
+              ${item.name}, ${item.job}
+            </h5>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-sm-6 col-6 end-vertically">
+            <h6 style="font-weight: bold; color: rgb(0, 0, 0); font-family: 'Montserrat';">
+              ${this.getDistance(item.latitude, item.longitude)}Km
+            </h6>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-sm-3 col-3 end">
+            <a style="
+              border-radius: 10px;
+              border: 0;
+              background-color: #f7911d;
+              color: #ffffff;
+              padding: 5px;
+              text-decoration: none;"
+              href='https://www.google.com/maps/dir/${this.currentLatitude},${this.currentLongitude}/${item.latitude},${item.longitude}' target='_blank'><i class="fa-solid fa-diamond-turn-right fa-xl"></i></a>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-sm-3 col-3 end">
+            <a style="
+              border-radius: 10px;
+              border: 0;
+              text-decoration: none;
+              margin-left: 5px;"
+              href='https://www.google.com/search?q=${item.name}+${item.city}' target='_blank'><img style='width: 30px;' src="../../assets/img/google-logo.png" alt="google logo"></a>
+          </div>
+        </div>
+        
       `);
+      
+      
 
       let marker = L.marker([parseFloat(item.latitude), parseFloat(item.longitude)],{icon: metamaskIcon}).bindPopup(popup).openPopup();
       this.markers.push(marker);
 
-      marker.addTo(this.map);
+      this.markerCluster.addLayer(marker);
+      this.map.addLayer(this.markerCluster);
+
+      lastLat = parseFloat(item.latitude);
+      lastLng = parseFloat(item.longitude);
     });
+
+    this.map.flyTo([lastLat, lastLng], 6);
   }
 
   removeMarkers(){
+    
     this.markers.forEach((marker) => {
+      this.markerCluster.removeLayer(marker);
       this.map.removeLayer(marker);
     });
 

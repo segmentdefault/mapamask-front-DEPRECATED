@@ -3,7 +3,7 @@
 <div class="container mt-5" *ngIf="business && !error">
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-            <img class="business-img" [src]="business.image" alt="">
+            <img class="business-img" [src]="business.images[0]" alt="">
         </div>
     </div>
     <div class="row mt-5">
@@ -13,7 +13,7 @@
         </div>
 
         <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 end">
-            <p class="rating">{{ business.puntuacion }}<i class="fa-solid fa-star fa-md star"></i></p>
+            <p class="rating">{{ business.rating }}<i class="fa-solid fa-star fa-md star"></i></p>
         </div>
     </div>
 

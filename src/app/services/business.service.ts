@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Business } from '../interfaces/business.inteface';
-
+import axios from 'axios';
 @Injectable({
   providedIn: 'root'
 })
 export class BusinessService {
 
   business: Array<Business> = [
-    {
+    /* {
       id: 1,
       name: "Adrián Serrano",
-      image: "../../assets/img/metamask-mapamask.jpg",
+      images: ["../../assets/img/metamask-mapamask.jpg"],
       email: "adrian@cryptospace.es",
       phone: "600206194",
       description: "Mi nombre es Adrián Serrano, soy programador blockchain, ofrezco servicios de desarrollo tanto en tecnología blockchain como en el ámbito de desarrollo web convencional",
@@ -21,7 +21,7 @@ export class BusinessService {
       longitude: "0.045783",
       city: "Castelló/Castellón",
       web: "https://www.cryptospace.es",
-      puntuacion: 5
+      rating: 5
     },
     {
       id: 2,
@@ -67,48 +67,46 @@ export class BusinessService {
       city: "Castelló/Castellón",
       web: "https://www.cryptospace.es",
       puntuacion: 3
-    }
+    } */
   ];
 
   constructor() { }
 
+  async searchBusiness(sector?: string, keyword?: string){
+    let searchBusinessEndPoint = environment.API_URL + "search";
+
+    return (await axios.get(searchBusinessEndPoint, {
+      params: {
+        sector: sector,
+        keyword: keyword
+      }
+    })).data;
+  }
+
+  async getAllBusiness(){
+    return (await axios.get(environment.API_URL)).data;
+  }
+
+  async getNumOfTotalBusiness(){
+    let getNumOfBusinessEndpoint = environment.API_URL + "count";
+
+    return (await axios.get(getNumOfBusinessEndpoint)).data;
+  }
+
   async getBusinessByPage(page: number){
     let paginationEndpoint = environment.API_URL + "page?page="+page;
 
-    let res = (await fetch(paginationEndpoint));
-    let data = await res.json();
-    
-    return data;
+    return (await axios.get(paginationEndpoint)).data;
   }
 
-  getBusinessById(id: number): Business{
-    let businessToReturn;
-    
-    this.business.forEach(item => {
-      
-      if(item.id == id){
-        businessToReturn = item;
-      }
-    });
+  async addBusiness(business: Business){
+    let addBusinessEndpoint = environment.API_URL + "addBusiness";
 
-    if(businessToReturn){
-      return businessToReturn;
-    } else {
-      return {
-        id: 0,
-        name: "",
-        image: "",
-        email: "",
-        phone: "",
-        description: "",
-        sector: "",
-        job: "",
-        latitude: "",
-        longitude: "",
-        city: "",
-        web: "",
-        puntuacion: 0
-    };
-    }
+    return await (await axios.post(addBusinessEndpoint, business)).data;
+  }
+  
+  async getBusinessById(id: number): Promise<Business>{
+    let getBusinessEndpoint = environment.API_URL + "getBusiness/" + id;
+    return (await axios.get(getBusinessEndpoint)).data;
   }
 }

@@ -15,17 +15,20 @@ export class ComercioComponent implements OnInit {
   business: Business = {
       id: 0,
       name: "",
-      image: "",
+      images: [],
       email: "",
       phone: "",
       description: "",
-      sector: "",
+      sectors: [],
       job: "",
       latitude: "",
       longitude: "",
       city: "",
+      country: "",
       web: "",
-      puntuacion: 0
+      rating: 0,
+      online: false,
+      distance: 0
   }
   
   constructor(
@@ -34,9 +37,16 @@ export class ComercioComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if(this.businessService.getBusinessById(this.businessId).id != 0){
-      this.business = this.businessService.getBusinessById(this.businessId);
-    } else {
+    this.getBusinessData();
+  }
+
+  async getBusinessData(){
+    try {
+      this.business = (await this.businessService.getBusinessById(this.businessId));
+      if(!this.business.images[0]){
+        this.business.images[0] = "../../assets/img/metamask-mapamask.jpg";
+      }
+    } catch (error) {
       this.error = "Business not found";
     }
   }

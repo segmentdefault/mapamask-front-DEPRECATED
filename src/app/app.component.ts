@@ -9,7 +9,7 @@ export class AppComponent {
   title = 'Mapamask';
 
   ngOnInit(): void {
-    //this.getCurrentLocation();
+    this.getCurrentLocation();
   }
   getCurrentLocation(){
     navigator.geolocation.getCurrentPosition(function(position){

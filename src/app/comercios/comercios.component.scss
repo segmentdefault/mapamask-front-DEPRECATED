@@ -43,7 +43,6 @@ input, select{
     width: 80%;
     padding: 20px 10px 20px 10px;
     border-radius: 5px;
-    cursor: pointer;
     
     h3{
         font-size: 2vw;
@@ -63,13 +62,21 @@ input, select{
         color: #934f00;
     }
 
+    i{
+        color: #f7911d;
+    }
+
     a:hover{
         text-decoration: underline;
     }
 
-    img{
+    .business-img{
         width: 100%;
         border-radius: 5px;
+    }
+
+    .google-logo{
+        width: 30px;
     }
 
     .link{
@@ -121,21 +128,28 @@ input, select{
         p{
             font-size: 2.5vw;
         }
+        h3{
+            font-size: 3vw;
+            margin-bottom: 0;
+        }
     }
 }
 
-@media (max-width: 465px){
+@media (max-width: 500px){
     #map { 
         width: 100%;
         margin: 0;
     }
+}
 
+@media (max-width: 465px){
     .container{
         padding: 0;
     }
 
     .info{
-        margin-left: 20px;
+        width: 90%;
+        margin-left: 25px;
     }
 
     .result{
@@ -147,6 +161,10 @@ input, select{
 
         h3{
             font-size: 4.5vw;
+        }
+
+        .google-btn{
+            margin-left: 10px;
         }
     }
 }

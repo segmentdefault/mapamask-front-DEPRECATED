@@ -15,84 +15,106 @@
 </div>
 <div class="container register-container">
   <div class="container form-container">
+
     <div class="row">
       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-5">
-          <input [(ngModel)]="name" type="text" placeholder="Nombre*">
+          <input [(ngModel)]="name" type="text" placeholder="Negocio*" required>
       </div>
     </div>
   
     <div class="row">
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 end mt-3">
-        <input [(ngModel)]="email" type="text" placeholder="Correo*">
+        <input [(ngModel)]="email" type="text" placeholder="Correo*" required>
       </div>
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 start mt-3">
-          <input [(ngModel)]="phone" type="text" placeholder="Teléfono">
+        <input [(ngModel)]="phone" type="text" placeholder="Teléfono">
       </div>
     </div>
   
     <div class="row">
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 end mt-3">
-        <button class="mapamask-btn-white" style="width: 100%;" data-bs-toggle="modal" data-bs-target="#selectSectorModal">Selecciona tus sectores…*</button>
+        <button class="mapamask-btn-white" style="width: 100%;" data-bs-toggle="modal" data-bs-target="#selectSectorModal">{{ buttonPlaceholder }}</button>
       </div>
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 start mt-3">
-          <input [(ngModel)]="job" type="text" placeholder="Trabajo">
+          <input [(ngModel)]="job" type="text" placeholder="Especialidad">
       </div>
     </div>
   
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 end mt-3">
         <input [(ngModel)]="street" type="text" placeholder="Calle">
       </div>
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 start mt-3">
         <input [(ngModel)]="number" type="text" placeholder="Numero">
       </div>
-    </div>
+    </div> -->
 
     <div class="row">
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 end mt-3">
-        <input [(ngModel)]="cp" type="text" placeholder="Código postal">
-      </div>
-      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 start mt-3">
-        <select [(ngModel)]="city" type="text">
-          <option selected>Ciudad…</option>
-          <option *ngFor="let city of citiesData" [value]="city.provincia">{{ city.provincia }}</option>
+        <select [(ngModel)]="country" type="text">
+          <option selected>País…*</option>
+          <option *ngFor="let country of countriesData" [value]="country.name_es">{{ country.name_es }}</option>
         </select>
       </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 start mt-3">
+        <input [(ngModel)]="city" type="text" placeholder="Ciudad…*">
+      </div>
     </div>
 
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 end mt-3">
-        <input [(ngModel)]="country" type="text" placeholder="País">
+        <select [(ngModel)]="country" type="text">
+          <option selected>País…</option>
+          <option *ngFor="let country of countriesData" [value]="country.name_es">{{ country.name_es }}</option>
+        </select>
       </div>
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 start mt-3">
         <input [(ngModel)]="web" type="text" placeholder="Web">
       </div>
-    </div>
-    
+    </div> -->
+
     <div class="row">
       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
-        <textarea [(ngModel)]="description" placeholder="Descripción*"></textarea>
+        <input [(ngModel)]="web" type="text" placeholder="Web">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
+        <textarea [(ngModel)]="description" placeholder="Pon aquí palabras clave relacionadas con tu negocio para que la gente pueda encontrarte más rápido." required></textarea>
       </div>
     </div>
   
     <div class="row">
       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
-        <input type="file">
+        <input type="file" (change)="saveImage($event)" multiple>
       </div>
     </div>
-  
+
     <div class="row">
       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
-        <button class="mapamask-btn" (click)="sendRegisterRequest()">Enviar</button>
-        <button class="mapamask-btn" (click)="showAtMap(number, street, cp, city, country)">Comprobar dirección</button>
-        <button (click)="fillBBDD()">click me!</button>
+        <h5 class="alert alert-danger" *ngIf="status">{{ status }}</h5>
       </div>
     </div>
   </div>
 </div>
 
+<div class="row">
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
+    <h6>*Selecciona en el mapa el punto donde deseas aparecer.</h6>
+  </div>
+</div>
+
 <div class="center">
   <div id="map"></div>
+</div>
+
+<div class="row">
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
+    <button class="mapamask-btn" (click)="sendRegisterRequest()">Enviar</button>
+    <!-- <button style="margin-left: 10px;" class="mapamask-btn" (click)="showAtMap(number, street, cp, city, country)">Comprobar dirección</button> -->
+    <!-- <button (click)="fillBBDD()">Fill BBDD</button> -->
+  </div>
 </div>
 
 <!-- SECTOR SELECTION MODAL -->
@@ -103,11 +125,12 @@
         <h5 class="modal-title">Selecciona los posibles sectores relacionados con tu negocio</h5>
       </div>
       <div class="modal-body">
+
         <div class="row">
-          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-6" *ngFor="let sector of sectorsData">
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-6" *ngFor="let sector of sectorsData;let i=index">
             <div class="checkbox">
               <label class="checkbox-wrapper">
-                <input type="checkbox" class="checkbox-input" />
+                <input [value]="sector.name" [(ngModel)]="indexes[i]" type="checkbox" class="checkbox-input" />
                 <span class="checkbox-tile">
                   <span class="checkbox-label">{{sector.name}}</span>
                 </span>
@@ -115,9 +138,16 @@
             </div>
           </div>
         </div>
+
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3 checkbox-container">
+            <input class="online-checkbox" [(ngModel)]="onlineService" type="checkbox" id="online-business" value="online"><span>Marca esta casilla si tu negocio ofrece servicios online</span>
+          </div>
+        </div>
+
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="getCheckboxes()">Aceptar</button>
       </div>
     </div>
   </div>

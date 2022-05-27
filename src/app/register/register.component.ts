@@ -1,10 +1,15 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import * as L  from 'leaflet';
-import { Subscription } from 'rxjs';
+import 'node_modules/leaflet-geosearch/dist/geosearch.css';
 
 import municipiosList from '../../assets/data/municipios.json';
 import provinciasList from '../../assets/data/provincias.json';
 import sectoresList from '../../assets/data/sectores.json';
+import countriesList from '../../assets/data/countries.json';
+import { UtilsService } from '../services/utils.service';
+import { Business } from '../interfaces/business.inteface';
+import { BusinessService } from '../services/business.service';
+import { Router, RouterLink } from '@angular/router';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -13,6 +18,7 @@ import sectoresList from '../../assets/data/sectores.json';
 export class RegisterComponent implements OnInit {
 
   map: any;
+  markers: any[] = [];
   currentLatitude: string | null = "";
   currentLongitude: string | null = "";
 
@@ -20,37 +26,137 @@ export class RegisterComponent implements OnInit {
   phone: string = "";
   email: string = "";
   web: string = "";
-  sector: string = "";
+  indexes: Array<boolean> = [];
+  sectors: Array<string> = [];
   job: string = "";
   description: string = "";
-  number: string = "6";
-  street: string = "albors";
-  cp: string = "12560";
-  city: string = "Ciudad…";
-  country: string = "españa";
+  number: string = "";
+  street: string = "";
+  images: string[] = [];
+  cp: string = "";
+  city: string = "";
+  country: string = "País…*";
+  latitude: string = "";
+  longitude: string = "";
+  onlineService: boolean = false;
 
   villagesData: any = municipiosList;
   citiesData: any = provinciasList;
   sectorsData: any = sectoresList;
+  countriesData: any = countriesList;
 
-  @ViewChild('modal', { read: ViewContainerRef })
-  entry!: ViewContainerRef;
-  sub!: Subscription;
+  buttonPlaceholder = "Selecciona tus sectores…*";
   
-  constructor() { }
+  status: string = "";
+
+  constructor(
+    private utils: UtilsService,
+    private businessService: BusinessService,
+    private router: Router) {  }
 
   ngOnInit(): void {
     this.currentLatitude = localStorage.getItem('currentLatitude');
     this.currentLongitude = localStorage.getItem('currentLongitude');
+
     this.setMap();
   }
 
-  ngOnDestroy(): void {
-    if (this.sub) this.sub.unsubscribe();
+  removeMarkers(){
+    this.markers.forEach((marker) => {
+      this.map.removeLayer(marker);
+    });
+
+    this.markers = [];
   }
 
-  sendRegisterRequest(){
+  setMap(){
+
+    var metamaskIcon = L.icon({
+      iconUrl: '../../assets/img/metamask-marker.png',
+      iconSize: [45, 47]
+    });
+
+    if(this.currentLatitude && this.currentLongitude){
+      this.map = L.map('map').setView([parseFloat(this.currentLatitude), parseFloat(this.currentLongitude)], 13);
+    } else {
+      this.map = L.map('map').setView([39.981516, -0.032805], 13);
+    }
     
+
+    var Jawg_Sunny = L.tileLayer('https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
+      attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> | <a href="https://www.cryptospace.es" target="_blank">CryptoSpace</a> contributors',
+      minZoom: 0,
+      maxZoom: 22,
+      subdomains: 'abcd',
+      accessToken: 'Q8ICYnDi0Fe2yGyJ2kORBlbMUu0ARufYhRjrRnoMvGXwDeluExCF3VmY3fmoQ4fs'
+    });
+
+    Jawg_Sunny.addTo(this.map);
+
+    this.map.on('click', (e: any) => {
+      this.removeMarkers();
+
+      var newMarker = L.marker(e.latlng, {icon: metamaskIcon}).addTo(this.map);
+
+      this.latitude = e.latlng.lat;
+      this.longitude = e.latlng.lng;
+
+      this.markers.push(newMarker);
+    });
+  }
+
+  saveImage(event: Event) {
+
+    let files: any = event;
+    
+    for (let i = 0; i < files.target.files.length; i++) {
+      let myReader:any = new FileReader();
+
+      myReader.onloadend = (e: any) => {
+        this.images[i] = myReader.result;
+      }
+      myReader.readAsDataURL(files.target.files[i]);
+    }
+  }
+
+  async sendRegisterRequest(){
+    this.status = "";
+    
+    if(this.name && this.email && this.sectors.length > 0 && this.city && this.country){
+      let numOfDocs = await this.businessService.getNumOfTotalBusiness();
+      let newBusiness: Business = {
+        distance: 0,
+        id: numOfDocs + 1,
+        name: this.name,
+        images: this.images,
+        email: this.email,
+        phone: this.phone,
+        description: this.description,
+        sectors: this.sectors,
+        job: this.job,
+        latitude: this.latitude,
+        longitude: this.longitude,
+        city: this.city,
+        country: this.country,
+        web: this.web,
+        online: this.onlineService,
+        rating: 0
+      }
+      
+
+      let res = await (this.businessService.addBusiness(newBusiness));
+      console.log(res);
+      if(res.added){
+        alert("Tu negocio ha sido añadido correctamente");
+        this.router.navigate(['/comercios']);
+      } else {
+        alert("Ha habido un error al crear tu negocio, por favor, vuelve a intentarlo y si el error persiste, comunicate con nosotros.");
+      }
+
+      
+    } else {
+      this.status = "Por favor, rellena los campos obligatorios (*)";
+    }
   }
 
   async fillBBDD(){
@@ -80,33 +186,31 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  async showAtMap(number: string, street: string, cp: string, city: string, country: string){
-    let streetArray = street.split(" ");
-    let query: string = "";
-    if(streetArray.length == 1){
-      query = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + number +"%20" + street +"%20" + cp + "%20"+ city + "%20" + country + ".json?access_token=pk.eyJ1IjoiYXNlcnJhbm8yMyIsImEiOiJjbDJrNmI4NGUwMGpiM2puazFwODgzczhqIn0.8u5Ay4jWQEvWYfYGYKoqfA";
+  getCheckboxes(){
+    this.sectors = [];
+    for (let i = 0; i < this.indexes.length; i++) {
+      if(this.indexes[i] == true){
+        this.sectors.push(this.sectorsData[i].name)
+      }
+    }
+    if(this.sectors.length > 0){
+      this.buttonPlaceholder =  "Ver sectores seleccionados";
     } else {
-      let streetComplete: string = "";
-      streetArray.forEach(item => {
-        streetComplete +=  item + "%20";
-      })
-      
-      query = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + number +"%20" + streetComplete + cp + "%20"+ city + "%20" + country + ".json?access_token=pk.eyJ1IjoiYXNlcnJhbm8yMyIsImEiOiJjbDJrNmI4NGUwMGpiM2puazFwODgzczhqIn0.8u5Ay4jWQEvWYfYGYKoqfA";
+      this.buttonPlaceholder =  "Selecciona tus sectores…*";
     }
     
-    let result = await fetch(query);
-    let data = await result.json();
-
-    let latitude = data.features[0].center[1];
-    let longitude = data.features[0].center[0];
-
-    this.setMarker(latitude, longitude);
-
-    this.map.setView([latitude, longitude], 16);
   }
 
-  setMarker(latitude: string, longitude: string){
-    var marcador = L.marker([parseFloat(latitude), parseFloat(longitude)])
+  async showAtMap(number: string, street: string, cp: string, city: string, country: string){
+    console.log(city, country);
+    let coords = await this.utils.getCoords(city, country, number, street, cp);
+
+    this.setMarker(coords.latitude, coords.longitude);
+    this.map.flyTo([coords.latitude, coords.longitude], 16);
+  }
+
+  setMarker(latitude: number, longitude: number){
+    var marcador = L.marker([latitude, longitude])
     marcador.bindPopup(`
       <p style="
         font-weight: bold;
@@ -120,38 +224,4 @@ export class RegisterComponent implements OnInit {
 
     marcador.addTo(this.map);
   }
-
-  setMap(){
-    if(this.currentLatitude && this.currentLongitude){
-      this.map = L.map('map').setView([parseFloat(this.currentLatitude), parseFloat(this.currentLongitude)], 13);
-    } else {
-      this.map = L.map('map').setView([39.981516, -0.032805], 13);
-    }
-    
-
-    var Jawg_Sunny = L.tileLayer('https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
-      attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> | <a href="https://www.cryptospace.es" target="_blank">CryptoSpace</a> contributors',
-      minZoom: 0,
-      maxZoom: 22,
-      subdomains: 'abcd',
-      accessToken: 'Q8ICYnDi0Fe2yGyJ2kORBlbMUu0ARufYhRjrRnoMvGXwDeluExCF3VmY3fmoQ4fs'
-    });
-
-    Jawg_Sunny.addTo(this.map);
-
-    let popup = L.popup({
-      closeButton: false
-    }).setContent(`
-      <p style="
-        font-weight: bold;
-        color: rgb(53, 97, 218);
-        font-family: 'Avenir Next LT Pro Regular';">CryptoSpace🚀<a target='_blank' href='https://cryptospace.es'>Conócenos</a>
-      </p>
-    `);
-
-    let marker = L.marker([39.981516, -0.032805]).bindPopup(popup).openPopup();
-
-    marker.addTo(this.map);
-  }
-  
 }
