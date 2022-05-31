@@ -124,6 +124,30 @@ export class RegisterComponent implements OnInit {
     
     if(this.name && this.email && this.sectors.length > 0 && this.city && this.country){
       let numOfDocs = await this.businessService.getNumOfTotalBusiness();
+
+      switch (true) {
+        case (this.web.substring(0, 11) == "http://www."):
+          break;
+        case (this.web.substring(0, 7) == "http://"):
+          this.web = "http://www." + this.web.substring(7);
+          break;
+        case (this.web.substring(0, 4) == "www."):
+          this.web = "http://www." + this.web.substring(4);
+          break;
+        case (this.web.substring(0, 12) == "https://www."):
+          this.web = "http://www." + this.web.substring(12);
+          break;
+        case (this.web.substring(0, 8) == "https://"):
+          this.web = "http://www." + this.web.substring(8);
+          break;
+        default:
+          this.web = "http://www." + this.web;
+          break;
+      }
+
+      console.log(this.web);
+      return;
+
       let newBusiness: Business = {
         distance: 0,
         id: numOfDocs + 1,

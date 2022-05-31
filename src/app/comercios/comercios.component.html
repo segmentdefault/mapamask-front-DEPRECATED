@@ -121,7 +121,7 @@
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="padding-left: 20px;">
                                 <p>{{ businessItem.job }}</p>
                                 <hr>
-                                <p><a [href]="businessItem.web" target="_blank">{{ businessItem.web }}</a></p>
+                                <p><a [href]="businessItem.web" target="_blank">{{ businessItem.web.substring(11) }}</a></p>
                                 <p>{{ businessItem.phone }}</p>
                                 <p>{{ businessItem.email }}</p>
                                 <p>{{ getDistance(businessItem.latitude, businessItem.longitude) }}Km</p>
