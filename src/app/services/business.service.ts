@@ -84,7 +84,7 @@ export class BusinessService {
   }
 
   async getAllBusiness(){
-    return (await axios.get(environment.API_URL)).data;
+    return (await axios.get(environment.API_URL + "business")).data;
   }
 
   async getNumOfTotalBusiness(){
@@ -106,7 +106,7 @@ export class BusinessService {
   }
   
   async getBusinessById(id: number): Promise<Business>{
-    let getBusinessEndpoint = environment.API_URL + "getBusiness/" + id;
+    let getBusinessEndpoint = environment.API_URL + "business/" + id;
     return (await axios.get(getBusinessEndpoint)).data;
   }
 }

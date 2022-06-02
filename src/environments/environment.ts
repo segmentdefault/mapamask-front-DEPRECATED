@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  API_URL: "http://82.223.202.122:3000/api/business/"
-  //API_URL: "http://localhost:3000/api/business/"
+  API_URL: "https://mapamask.heroku.com/api/"
+  //API_URL: "http://localhost:3000/api/"
 };
 
 /*

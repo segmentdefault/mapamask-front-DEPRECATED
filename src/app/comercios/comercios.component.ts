@@ -182,7 +182,12 @@ export class ComerciosComponent implements OnInit {
     
     this.searchLoading = false;
 
-    this.map = L.map('map').setView([40.0619668, -2.1830444], 6);
+    if(this.currentLatitude && this.currentLongitude){
+      this.map = L.map('map').setView([parseInt(this.currentLatitude), parseInt(this.currentLongitude)], 18);
+    } else {
+      this.map = L.map('map').setView([40.0619668, -2.1830444], 18);
+    }
+    
     var Jawg_Sunny = L.tileLayer('https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
       attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> | <a href="https://www.cryptospace.es" target="_blank">CryptoSpace</a> contributors',
       minZoom: 0,
