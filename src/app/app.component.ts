@@ -13,7 +13,7 @@ export class AppComponent {
     if((!localStorage.getItem("currentLatitude") && !localStorage.getItem("currentLongitude"))){
       this.getCurrentLocation();
     } else {
-      if(parseInt(localStorage.getItem("lastTimestamp")!) + 600000 > Date.now()){
+      if(parseInt(localStorage.getItem("lastTimestamp")!) + 300000 > Date.now()){
         this.getCurrentLocation();
       }
     }
