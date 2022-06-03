@@ -72,7 +72,7 @@ export class RegisterComponent implements OnInit {
   setMap(){
 
     var metamaskIcon = L.icon({
-      iconUrl: '../../assets/img/metamask-marker.png',
+      iconUrl: '../../assets/img/mapamask-logo.png',
       iconSize: [45, 47]
     });
 
@@ -106,7 +106,6 @@ export class RegisterComponent implements OnInit {
   }
 
   saveImage(event: Event) {
-
     let files: any = event;
     
     for (let i = 0; i < files.target.files.length; i++) {
@@ -144,9 +143,6 @@ export class RegisterComponent implements OnInit {
           this.web = "http://www." + this.web;
           break;
       }
-
-      console.log(this.web);
-      return;
 
       let newBusiness: Business = {
         distance: 0,

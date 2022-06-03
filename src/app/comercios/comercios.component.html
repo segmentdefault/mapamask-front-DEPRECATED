@@ -95,11 +95,11 @@
                     <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2" style="padding: 0;">
 
                         <ng-container *ngIf="businessItem.images[0]; else noImage">
-                            <img class="business-img" [src]="businessItem.images[0]" alt="">
+                            <img class="business-img" [src]="businessItem.images[0] | sanitizeURL" alt="">
                         </ng-container>
 
                         <ng-template #noImage>
-                            <img class="business-img" src="../../assets/img/metamask-mapamask.jpg" alt="">
+                            <img class="business-img" src="../../assets/img/mapamask-logo.png" alt="">
                         </ng-template>
                         
                     </div>

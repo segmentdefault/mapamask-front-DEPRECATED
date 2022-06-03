@@ -12,6 +12,7 @@ import { RegisterComponent } from './register/register.component';
 import { ComercioComponent } from './comercio/comercio.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { SanitizeURLPipe } from './pipes/sanitize-url.pipe';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { environment } from '../environments/environment';
     TutorialComponent,
     MetamaskComponent,
     RegisterComponent,
-    ComercioComponent
+    ComercioComponent,
+    SanitizeURLPipe
   ],
   imports: [
     BrowserModule,
