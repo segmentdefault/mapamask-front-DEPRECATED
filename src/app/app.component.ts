@@ -10,7 +10,9 @@ export class AppComponent {
   title = 'Mapamask';
 
   ngOnInit(): void {
-    this.getCurrentLocation();
+    if(!localStorage.getItem("currentLatitude") && !localStorage.getItem("currentLongitude")){
+      this.getCurrentLocation();
+    }
   }
 
   getCurrentLocation(){
@@ -20,9 +22,8 @@ export class AppComponent {
       
       localStorage.setItem("currentLatitude", latitude.toString());
       localStorage.setItem("currentLongitude", longitude.toString());
-
-      window.location.reload();
     });
+    window.location.reload();
   }
   
 }
