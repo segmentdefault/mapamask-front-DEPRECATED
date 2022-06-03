@@ -10,8 +10,12 @@ export class AppComponent {
   title = 'Mapamask';
 
   ngOnInit(): void {
-    if(!localStorage.getItem("currentLatitude") && !localStorage.getItem("currentLongitude")){
+    if((!localStorage.getItem("currentLatitude") && !localStorage.getItem("currentLongitude"))){
       this.getCurrentLocation();
+    } else {
+      if(parseInt(localStorage.getItem("lastTimestamp")!) + 600000 > Date.now()){
+        this.getCurrentLocation();
+      }
     }
   }
 
@@ -20,6 +24,7 @@ export class AppComponent {
       let latitude = position.coords.latitude;
       let longitude = position.coords.longitude;
       
+      localStorage.setItem("lastTimestamp", Date.now().toString());
       localStorage.setItem("currentLatitude", latitude.toString());
       localStorage.setItem("currentLongitude", longitude.toString());
     });
