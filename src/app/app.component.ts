@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Coords } from 'leaflet';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,7 @@ export class AppComponent {
   ngOnInit(): void {
     this.getCurrentLocation();
   }
+
   getCurrentLocation(){
     navigator.geolocation.getCurrentPosition(function(position){
       let latitude = position.coords.latitude;
@@ -18,6 +20,8 @@ export class AppComponent {
       
       localStorage.setItem("currentLatitude", latitude.toString());
       localStorage.setItem("currentLongitude", longitude.toString());
+
+      window.location.reload();
     });
   }
   
