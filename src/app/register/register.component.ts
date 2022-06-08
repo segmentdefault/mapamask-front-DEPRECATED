@@ -232,17 +232,11 @@ export class RegisterComponent implements OnInit {
   }
 
   setMarker(latitude: number, longitude: number){
-    var marcador = L.marker([latitude, longitude])
-    marcador.bindPopup(`
-      <p style="
-        font-weight: bold;
-        color: rgb(0, 0, 0);
-        font-family: 'Montserrat';">Your location!
-      </p>
-      <p>
-        ${latitude}, ${longitude}
-      </p>
-    `).openPopup();
+    var metamaskIcon = L.icon({
+      iconUrl: '../../assets/img/mapamask-logo.png',
+      iconSize: [45, 47]
+    });
+    var marcador = L.marker([latitude, longitude],{icon: metamaskIcon});
 
     this.markers.push(marcador);
 
