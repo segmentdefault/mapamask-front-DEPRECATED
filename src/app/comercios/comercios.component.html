@@ -110,7 +110,8 @@
                             </div>
                             <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-2 end center-vertically" style="padding: 0;">
                                 <!-- <p>{{ businessItem.rating }}<i class="fa-solid fa-star star"></i></p> -->
-                                <a href="https://www.google.com/maps/dir/{{currentLatitude}},{{currentLongitude}}/{{businessItem.latitude}},{{businessItem.longitude}}" target="_blank"><i class="fa-solid fa-diamond-turn-right fa-xl"></i></a>
+                                <a *ngIf="businessItem.distance != -1" href="https://www.google.com/maps/dir/{{currentLatitude}},{{currentLongitude}}/{{businessItem.latitude}},{{businessItem.longitude}}" target="_blank"><i class="fa-solid fa-diamond-turn-right fa-xl"></i></a>
+                                <i *ngIf="businessItem.distance == -1" class="fa-solid fa-diamond-turn-right fa-xl" style="color: #737373; cursor: not-allowed;"></i>
                             </div>
                             <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-2 end center-vertically" style="padding: 0;">
                                 <!-- <p>{{ businessItem.rating }}<i class="fa-solid fa-star star"></i></p> -->
@@ -124,7 +125,8 @@
                                 <p><a [href]="businessItem.web" target="_blank">{{ businessItem.web.substring(11) }}</a></p>
                                 <p>{{ businessItem.phone }}</p>
                                 <p>{{ businessItem.email }}</p>
-                                <p>{{ getDistance(businessItem.latitude, businessItem.longitude) }}Km</p>
+                                <p *ngIf="businessItem.distance != -1">{{ businessItem.distance }}Km</p>
+                                <p *ngIf="businessItem.distance == -1">Geolocalización no activada</p>
                             </div>
                         </div>
                     </div>

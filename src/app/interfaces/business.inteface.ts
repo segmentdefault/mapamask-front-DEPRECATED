@@ -1,5 +1,5 @@
 export interface Business{
-    distance: number;
+    distance: number,
     id: number,
     name: string,
     images: string[],

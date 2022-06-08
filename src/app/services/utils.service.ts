@@ -1,28 +1,15 @@
 import { Injectable, Query } from '@angular/core';
 import * as L  from 'leaflet';
+import { Observable, Subject } from 'rxjs';
 import { Business } from '../interfaces/business.inteface';
+import { Position } from '../interfaces/position.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilsService {
 
-  currentLatitude: number | null = 0;
-  currentLongitude: number | null = 0;
-
-  latitude: string = "";
-  longitude: string = "";
-
-  lat1: number = 0;
-  lat2: number = 0;
-  lon1: number = 0;
-  lon2: number = 0;
-  distance: string = "";
-
-  constructor() { 
-    this.currentLatitude = parseFloat(localStorage.getItem('currentLatitude')!);
-    this.currentLongitude = parseFloat(localStorage.getItem('currentLongitude')!);
-  }
+  constructor() { }
 
   async getCoords(city: string, country: string, number?: string, street?: string, cp?: string){
     let query: string = "";
@@ -52,26 +39,29 @@ export class UtilsService {
     }
   }
 
-  getDistanceBetweenCoords(lat2: number, lon2: number){
-    let lat1 = this.currentLatitude!;
-    let lon1 = this.currentLongitude!;
+  getDistanceBetweenCoords(lat2: number, lon2: number, userLatitude: number, userLongitude: number){
 
-    let rad = function (x: number) {
-      return x * Math.PI / 180;
+    if(userLatitude != 0 && userLongitude != 0){
+      let rad = function (x: number) {
+        return x * Math.PI / 180;
+      }
+  
+      var R = 6378.137;//Radio de la tierra en km
+      var dLat = rad(lat2 - userLatitude);
+      var dLong = rad(lon2 - userLongitude);
+      var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(userLatitude)) * Math.cos(rad(lat2)) * Math.sin(dLong / 2) * Math.sin(dLong / 2);
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      var d = R * c;
+      return parseFloat(d.toFixed(2));
+    } else {
+      return -1;
     }
-
-    var R = 6378.137;//Radio de la tierra en km
-    var dLat = rad(lat2 - lat1);
-    var dLong = rad(lon2 - lon1);
-    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLong / 2) * Math.sin(dLong / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = R * c;
-    return parseFloat(d.toFixed(2));//Retorna dos decimales
+    
   }
 
-  getAndSaveAllDistances(business: any){
+  getAndSaveAllDistances(business: any, currentLatitude: number, currentLongitude: number){
     business.forEach((item: Business) => {
-      item.distance = this.getDistanceBetweenCoords(parseFloat(item.latitude), parseFloat(item.longitude));
+      item.distance = this.getDistanceBetweenCoords(parseFloat(item.latitude), parseFloat(item.longitude), currentLatitude, currentLongitude);
     });
 
     return business;

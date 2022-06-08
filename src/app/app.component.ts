@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { Coords } from 'leaflet';
+import { Observable } from 'rxjs';
+import { Position } from './interfaces/position.interface';
+import { UtilsService } from './services/utils.service';
 
 @Component({
   selector: 'app-root',
@@ -9,26 +11,9 @@ import { Coords } from 'leaflet';
 export class AppComponent {
   title = 'Mapamask';
 
-  ngOnInit(): void {
-    if((!localStorage.getItem("currentLatitude") && !localStorage.getItem("currentLongitude"))){
-      this.getCurrentLocation();
-    } else {
-      if(parseInt(localStorage.getItem("lastTimestamp")!) + 300000 > Date.now()){
-        this.getCurrentLocation();
-      }
-    }
-  }
+  constructor(){}
 
-  getCurrentLocation(){
-    navigator.geolocation.getCurrentPosition(function(position){
-      let latitude = position.coords.latitude;
-      let longitude = position.coords.longitude;
-      
-      localStorage.setItem("lastTimestamp", Date.now().toString());
-      localStorage.setItem("currentLatitude", latitude.toString());
-      localStorage.setItem("currentLongitude", longitude.toString());
-    });
-    window.location.reload();
+  ngOnInit(): void {
   }
   
 }

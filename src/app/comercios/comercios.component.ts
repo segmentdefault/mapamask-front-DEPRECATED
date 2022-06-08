@@ -12,6 +12,8 @@ import sectoresList from '../../assets/data/sectores.json';
 import { UtilsService } from '../services/utils.service';
 import { Business } from '../interfaces/business.inteface';
 import { DomSanitizer, SafeResourceUrl, SafeUrl} from '@angular/platform-browser';
+import { Position } from '../interfaces/position.interface';
+import { Observable, Subject } from 'rxjs';
 @Component({
   selector: 'app-comercios',
   templateUrl: './comercios.component.html',
@@ -31,8 +33,8 @@ export class ComerciosComponent implements OnInit {
   markers: Array<any> = [];
   markerCluster: any;
   map: any;
-  currentLatitude: string | null = "";
-  currentLongitude: string | null = "";
+  currentLatitude: number = 0;
+  currentLongitude: number = 0;
 
   businessSearch: any;
 
@@ -57,37 +59,59 @@ export class ComerciosComponent implements OnInit {
 
   ngOnInit(): void {
     this.width = window.screen.width;
-
-    this.currentLatitude = localStorage.getItem('currentLatitude');
-    this.currentLongitude = localStorage.getItem('currentLongitude');
-
+    
     this.mapView = true;
     this.listView = false;
+    
+    this.getCurrentPosition();
+  }
 
-    this.setMap();
+  getCurrentPosition(){
+    navigator.geolocation.getCurrentPosition(
+      //SUCCESS
+      async (position) => {
+        this.currentLatitude = position.coords.latitude;
+        this.currentLongitude = position.coords.longitude;
+        await this.setMap();
+    }, 
+      //ERROR
+      async (error) => {
+
+        switch (true) {
+          case error.code == 1:
+            alert("No has aceptado acceder a tu geolocalización, algunas funciones de la página no funcionarán");
+            break;
+          case error.code == 2:
+            alert("Posición no disponible en este momento");
+            break;
+          default:
+            alert("Tiempo de espera consumido, vuelva a intentarlo");
+            break;
+        }
+        
+        await this.setMap();
+    });
   }
 
   async getBusiness(){
-    this.business = this.utils.getAndSaveAllDistances(await this.businessService.getAllBusiness());
+    this.business = this.utils.getAndSaveAllDistances(await this.businessService.getAllBusiness(), this.currentLatitude, this.currentLongitude);
     this.orderBusinessByDistance();
   }
 
   orderBusinessByDistance(){
-    this.business.sort((a: Business,b: Business) => {
-      if(a.distance < b.distance){
-        return -1;
-      }
-
-      if(a.distance > b.distance){
-        return 1;
-      }
-
-      return 0;
-    })
-  }
-
-  getDistance(lat: string, lon: string){
-    return this.utils.getDistanceBetweenCoords(parseFloat(lat), parseFloat(lon));
+    if(this.currentLatitude != 0 && this.currentLongitude != 0){
+      this.business.sort((a: Business,b: Business) => {
+        if(a.distance < b.distance){
+          return -1;
+        }
+  
+        if(a.distance > b.distance){
+          return 1;
+        }
+  
+        return 0;
+      })
+    }
   }
 
   async nextPage(){
@@ -184,7 +208,7 @@ export class ComerciosComponent implements OnInit {
     this.searchLoading = false;
 
     if(this.currentLatitude && this.currentLongitude){
-      this.map = L.map('map').setView([parseInt(this.currentLatitude), parseInt(this.currentLongitude)], 18);
+      this.map = L.map('map').setView([this.currentLatitude, this.currentLongitude], 18);
     } else {
       this.map = L.map('map').setView([40.0619668, -2.1830444], 18);
     }
@@ -227,7 +251,7 @@ export class ComerciosComponent implements OnInit {
           <div class="row">
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-sm-6 col-6 end-vertically">
               <h6 style="font-weight: bold; color: rgb(0, 0, 0); font-family: 'Montserrat';">
-                ${this.getDistance(item.latitude, item.longitude)}Km
+                ${item.distance}Km
               </h6>
             </div>
             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-sm-3 col-3 end">

@@ -222,7 +222,9 @@ export class RegisterComponent implements OnInit {
   }
 
   async showAtMap(number: string, street: string, cp: string, city: string, country: string){
-    console.log(city, country);
+    this.removeMarkers();
+    this.markers = [];
+    
     let coords = await this.utils.getCoords(city, country, number, street, cp);
 
     this.setMarker(coords.latitude, coords.longitude);
@@ -241,6 +243,8 @@ export class RegisterComponent implements OnInit {
         ${latitude}, ${longitude}
       </p>
     `).openPopup();
+
+    this.markers.push(marcador);
 
     marcador.addTo(this.map);
   }
