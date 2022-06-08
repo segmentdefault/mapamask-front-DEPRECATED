@@ -1,7 +1,7 @@
 {
-  "name": "mapamask",
-  "short_name": "mapamask",
-  "theme_color": "#1976d2",
+  "name": "Mapamask",
+  "short_name": "Mapamask",
+  "theme_color": "#f7911d",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "./",

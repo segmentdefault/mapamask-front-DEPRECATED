@@ -208,7 +208,7 @@ export class ComerciosComponent implements OnInit {
     this.searchLoading = false;
 
     if(this.currentLatitude && this.currentLongitude){
-      this.map = L.map('map').setView([this.currentLatitude, this.currentLongitude], 18);
+      this.map = L.map('map').setView([this.currentLatitude, this.currentLongitude], 6);
     } else {
       this.map = L.map('map').setView([40.0619668, -2.1830444], 18);
     }
@@ -283,13 +283,8 @@ export class ComerciosComponent implements OnInit {
   
         this.markerCluster.addLayer(marker);
         this.map.addLayer(this.markerCluster);
-  
-        lastLat = parseFloat(item.latitude);
-        lastLng = parseFloat(item.longitude);
       }
     });
-
-    this.map.flyTo([lastLat, lastLng], 6);
   }
 
   removeMarkers(){
