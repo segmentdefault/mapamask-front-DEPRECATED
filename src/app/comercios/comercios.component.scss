@@ -136,6 +136,10 @@ input, select{
     input, button, select{
         margin-top: 10px;
     }
+
+    .search-input{
+        margin: 15px;
+    }
 }
 
 @media (max-width: 886px){
@@ -164,7 +168,7 @@ input, select{
 
     .info{
         width: 90%;
-        margin-left: 25px;
+        margin-left: 15px;
     }
 
     .result{
