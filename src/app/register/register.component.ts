@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as L  from 'leaflet';
 import 'node_modules/leaflet-geosearch/dist/geosearch.css';
-
 import municipiosList from '../../assets/data/municipios.json';
 import provinciasList from '../../assets/data/provincias.json';
 import sectoresList from '../../assets/data/sectores.json';
@@ -9,8 +8,11 @@ import countriesList from '../../assets/data/countries.json';
 import { UtilsService } from '../services/utils.service';
 import { Business } from '../interfaces/business.inteface';
 import { BusinessService } from '../services/business.service';
-import { Router, RouterLink } from '@angular/router';
+import { Router} from '@angular/router';
+import * as ethers from 'ethers';
+
 declare var window: any
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -61,6 +63,15 @@ export class RegisterComponent implements OnInit {
     this.currentLatitude = localStorage.getItem('currentLatitude');
     this.currentLongitude = localStorage.getItem('currentLongitude');
 
+    window.ethereum.on('accountsChanged', () => {
+      this.getWallet();
+    });
+
+    if(localStorage.getItem('connected') === "true"){
+      this.connected = true;
+      this.getWallet();
+    }
+
     this.setMap();
   }
 
@@ -108,13 +119,21 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  async connectWallet(){
-    /* if (window.ethereum) {    
-      await window.ethereum.request({method: 'eth_requestAccounts'});    
-      window.web3 = new Web3(window.ethereum);
+  async getWallet() {
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    const signer = provider.getSigner();
+    this.wallet = await signer.getAddress();
+  }
 
-      this.wallet = window.web3.eth.accounts[0];
-    } */
+  async connectWallet(){
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    
+    this.wallet = await signer.getAddress();
+    this.connected = true;
+    localStorage.setItem("connected", "true");
   }
 
   showBusiness(){
@@ -176,7 +195,8 @@ export class RegisterComponent implements OnInit {
         country: this.country,
         web: this.web,
         online: this.onlineService,
-        rating: 0
+        rating: 0,
+        owner: this.wallet
       }
       
 
