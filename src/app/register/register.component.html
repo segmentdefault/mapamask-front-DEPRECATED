@@ -11,6 +11,33 @@
           <h3 style="color: #ffffff;">¡y acepta cryptos en tu negocio!</h3>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
+        <h4>Conecta tu wallet de Metamask antes de añadir tu negocio para poder editarlo o borrarlo más tarde.</h4>
+      </div>
+    </div>
+
+    <div *ngIf="!connected; else isConnected" class="row mt-3">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
+        <button class="mapamask-btn" (click)="connectWallet()">Conectar Wallet</button>
+      </div>
+    </div>
+
+    <ng-template #isConnected>
+      <div class="row mt-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
+          <button class="mapamask-btn" (click)="showBusiness()">Ver mis negocios</button>
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
+          <h5>Wallet connected: {{ wallet.substring(0,5) }} … {{ wallet.substring(wallet.length-5) }}</h5>
+        </div>
+      </div>
+    </ng-template>
+
   </div>
 </div>
 <div class="container register-container">

@@ -10,6 +10,7 @@ import { UtilsService } from '../services/utils.service';
 import { Business } from '../interfaces/business.inteface';
 import { BusinessService } from '../services/business.service';
 import { Router, RouterLink } from '@angular/router';
+declare var window: any
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -39,6 +40,8 @@ export class RegisterComponent implements OnInit {
   latitude: string = "";
   longitude: string = "";
   onlineService: boolean = false;
+  wallet: string = "0x0000000000000000000000000000000000000000";
+  connected: boolean = false;
 
   villagesData: any = municipiosList;
   citiesData: any = provinciasList;
@@ -103,6 +106,19 @@ export class RegisterComponent implements OnInit {
 
       this.markers.push(newMarker);
     });
+  }
+
+  async connectWallet(){
+    /* if (window.ethereum) {    
+      await window.ethereum.request({method: 'eth_requestAccounts'});    
+      window.web3 = new Web3(window.ethereum);
+
+      this.wallet = window.web3.eth.accounts[0];
+    } */
+  }
+
+  showBusiness(){
+    this.router.navigate(["/misNegocios"]);
   }
 
   saveImage(event: Event) {
