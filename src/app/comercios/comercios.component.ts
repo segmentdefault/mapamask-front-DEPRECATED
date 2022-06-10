@@ -174,24 +174,27 @@ export class ComerciosComponent implements OnInit {
     this.error = "";
     this.searchLoading = true;
 
-    if(sector == "Sector…" && !keyword){
-      await this.getBusiness();
-      this.setMarkers();
-    } else {
+    if(sector != "Sector…" || keyword){
       try {
-        this.business = (await this.businessService.searchBusiness(sector, keyword));
-        
-        if(this.business.length > 0){
+        this.businessSearch = (await this.businessService.searchBusiness(sector, keyword));
+       
+        if(this.businessSearch.length > 0){
+          this.business = this.businessSearch;
+          this.utils.getAndSaveAllDistances(this.business, this.currentLatitude, this.currentLongitude);
           this.setMarkers();
+          this.map.flyTo([this.currentLatitude, this.currentLongitude], 6);
         } else {
-          await this.getBusiness();
-          this.setMarkers();
+          this.viewInList();
           this.error = "Ningún negocio coincide con la búsqueda";
         }
         
       } catch (error) {
         console.log(error);
       }
+    } else {
+      await this.getBusiness();
+      this.setMarkers();
+      this.map.flyTo([this.currentLatitude, this.currentLongitude], 6);
     }
 
     this.searchLoading = false;
@@ -228,8 +231,6 @@ export class ComerciosComponent implements OnInit {
 
   setMarkers(){
     this.markerCluster = L.markerClusterGroup();
-    let lastLat;
-    let lastLng;
     var metamaskIcon = L.icon({
       iconUrl: '../../assets/img/mapamask-logo.png',
       iconSize: [45, 47]

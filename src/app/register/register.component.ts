@@ -228,6 +228,8 @@ export class RegisterComponent implements OnInit {
     let coords = await this.utils.getCoords(city, country, number, street, cp);
 
     this.setMarker(coords.latitude, coords.longitude);
+    this.latitude = coords.latitude.toString();
+    this.longitude = coords.longitude.toString();
     this.map.flyTo([coords.latitude, coords.longitude], 16);
   }
 

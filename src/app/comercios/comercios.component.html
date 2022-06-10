@@ -2,13 +2,13 @@
     <div class="container">
         <div class="row mt-5">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 info">
-                <h1 class="title">El buscador de negocios que…</h1>
+                <h1 class="title">El buscador de negocios que</h1>
             </div>
         </div>
 
         <div class="row mt-2">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 info">
-                <h1 class="subtitle">¡Aceptan cryptos!</h1>
+                <h1 class="subtitle">Aceptan cryptos</h1>
             </div>
         </div>
 
@@ -19,14 +19,38 @@
         </div>
     
         <div class="row mt-4">
-            <!-- <div class="col-xl-2 col-lg-2 col-md-3 col-sm-12-col-12" [ngClass]="width >= 768 ? 'end' : 'center'">
-                <select [(ngModel)]="cityInput" placeholder="Provincia" type="text" class="search-input" style="width: 90%;">
-                    <option selected>Ciudad…</option>
-                    <option *ngFor="let city of citiesData" [value]="city.provincia">{{ city.provincia }}</option>
+
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" [ngClass]="width >= 768 ? 'start' : 'center'">
+                <select [(ngModel)]="sectorInput" name="sector" id="sector" class="search-input">
+                    <option selected>Sector…</option>
+                    <option *ngFor="let sector of sectorsData" [value]="sector.name">{{sector.name}}</option>
                 </select>
-            </div> -->
+            </div>
         
-            <div class="col-xl-5 col-lg-5 col-md-3 col-sm-12-col-12" [ngClass]="width >= 768 ? 'start' : 'center'">
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" [ngClass]="width >= 768 ? 'start' : 'center'">
+                <input [(ngModel)]="keywordInput" placeholder="Palabra clave" type="text" class="search-input">
+            </div>
+        
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" [ngClass]="width >= 768 ? 'start' : 'center'">
+                <div class="row" style="width: 100%;">
+                    <div class="col col-md-6 col-sm-6 col-6" [ngClass]="width >= 768 ? 'start' : 'center'">
+                        <button (click)="searchBusiness(keywordInput, sectorInput)" class="mapamask-btn search-btn">Buscar</button>
+                    </div>
+
+                    <div class="col col-md-6 col-sm-6 col-6" [ngClass]="width >= 768 ? 'start' : 'center'" *ngIf="mapView">
+                        <button class="view-btn" (click)="viewInList()">View in list</button>
+                    </div>
+                    <div class="col col-md-6 col-sm-6 col-6" [ngClass]="width >= 768 ? 'start' : 'center'" *ngIf="listView">
+                        <button class="view-btn" (click)="viewInMap()">View in map</button>
+                    </div>
+                </div>
+                
+                
+            </div>
+
+            
+        
+            <!-- <div class="col-xl-5 col-lg-5 col-md-3 col-sm-12-col-12" [ngClass]="width >= 768 ? 'start' : 'center'">
                 <select [(ngModel)]="sectorInput" name="sector" id="sector" class="search-input" style="width: 90%;">
                     <option selected>Sector…</option>
                     <option *ngFor="let sector of sectorsData" [value]="sector.name">{{sector.name}}</option>
@@ -40,6 +64,13 @@
             <div class="col-xl-2 col-lg-2 col-md-3 col-sm-12-col-12" [ngClass]="width >= 768 ? 'start' : 'center'">
                 <button (click)="searchBusiness(keywordInput, sectorInput)" class="mapamask-btn search-btn">Buscar</button>
             </div>
+
+            <div class="col-xl-2 col-lg-2 col-md-3 col-sm-12-col-12 center" *ngIf="mapView">
+                <button class="btn btn-outline-warning" (click)="viewInList()">View in list</button>
+            </div>
+            <div class="col-xl-2 col-lg-2 col-md-3 col-sm-12-col-12 center" *ngIf="listView">
+                <button class="btn btn-outline-warning" (click)="viewInMap()">View in map</button>
+            </div> -->
             
         </div>
 
@@ -70,21 +101,6 @@
     <div class="row mt-3" *ngIf="error != ''">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
             <h6 class="alert alert-danger" role="alert">{{ error }}</h6>
-        </div>
-    </div>
-
-    <div class="row mt-3">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center" *ngIf="mapView">
-            <button *ngIf="!searchLoading" class="btn btn-outline-warning" (click)="viewInList()">View in list</button>
-        </div>
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center" *ngIf="listView">
-            <button *ngIf="!searchLoading" class="btn btn-outline-warning" (click)="viewInMap()">View in map</button>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
-            <div id="map"></div>
         </div>
     </div>
 
@@ -158,3 +174,4 @@
         </div> -->
     </div>
 </div>
+<div id="map"></div>
