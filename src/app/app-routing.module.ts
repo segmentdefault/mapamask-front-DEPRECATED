@@ -4,6 +4,7 @@ import { CalculadoraComponent } from './calculadora/calculadora.component';
 import { ComercioComponent } from './comercio/comercio.component';
 import { ComerciosComponent } from './comercios/comercios.component';
 import { MetamaskComponent } from './metamask/metamask.component';
+import { MisNegociosComponent } from './mis-negocios/mis-negocios.component';
 import { RegisterComponent } from './register/register.component';
 import { TutorialComponent } from './tutorial/tutorial.component';
 
@@ -12,6 +13,7 @@ const routes: Routes = [
   {path: "comercio/:id", component: ComercioComponent},
   {path: "registro", component: RegisterComponent},
   {path: "calculadora", component: CalculadoraComponent},
+  {path: "misNegocios", component: MisNegociosComponent},
   {path: "tutorial", component: TutorialComponent},
   {path: "metamask", component: MetamaskComponent},
   {path: "", pathMatch: "full", redirectTo: "comercios"},

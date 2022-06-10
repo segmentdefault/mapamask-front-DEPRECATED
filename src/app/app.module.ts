@@ -13,6 +13,7 @@ import { ComercioComponent } from './comercio/comercio.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { SanitizeURLPipe } from './pipes/sanitize-url.pipe';
+import { MisNegociosComponent } from './mis-negocios/mis-negocios.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { SanitizeURLPipe } from './pipes/sanitize-url.pipe';
     MetamaskComponent,
     RegisterComponent,
     ComercioComponent,
-    SanitizeURLPipe
+    SanitizeURLPipe,
+    MisNegociosComponent
   ],
   imports: [
     BrowserModule,
