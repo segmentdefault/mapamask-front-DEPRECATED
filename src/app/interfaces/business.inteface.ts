@@ -1,6 +1,6 @@
 export interface Business{
+    _id?: string,
     distance: number,
-    id: number,
     name: string,
     images: string[],
     email: string,
@@ -13,7 +13,6 @@ export interface Business{
     city: string,
     country: string,
     web: string,
-    rating: number,
     online: boolean,
     owner: string
 }

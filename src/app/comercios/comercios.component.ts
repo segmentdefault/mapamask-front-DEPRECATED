@@ -5,15 +5,12 @@ import 'leaflet.markercluster';
 import 'leaflet-coordinates-control';
 /* import 'L.Control.Coordinates.css'; */
 import { BusinessService } from '../services/business.service';
-
 import municipiosList from '../../assets/data/municipios.json';
 import provinciasList from '../../assets/data/provincias.json';
 import sectoresList from '../../assets/data/sectores.json';
 import { UtilsService } from '../services/utils.service';
 import { Business } from '../interfaces/business.inteface';
-import { DomSanitizer, SafeResourceUrl, SafeUrl} from '@angular/platform-browser';
-import { Position } from '../interfaces/position.interface';
-import { Observable, Subject } from 'rxjs';
+import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-comercios',
   templateUrl: './comercios.component.html',
@@ -66,12 +63,22 @@ export class ComerciosComponent implements OnInit {
     this.getCurrentPosition();
   }
 
+  keyDown(event: any) {
+    if (event.keyCode == 13) {
+      this.searchBusiness(this.keywordInput, this.sectorInput);
+    }
+  }
+  
   getCurrentPosition(){
     navigator.geolocation.getCurrentPosition(
       //SUCCESS
       async (position) => {
         this.currentLatitude = position.coords.latitude;
         this.currentLongitude = position.coords.longitude;
+
+        localStorage.setItem('currentLatitude', this.currentLatitude.toString());
+        localStorage.setItem('currentLongitude', this.currentLongitude.toString());
+
         await this.setMap();
     }, 
       //ERROR

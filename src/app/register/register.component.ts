@@ -8,7 +8,7 @@ import countriesList from '../../assets/data/countries.json';
 import { UtilsService } from '../services/utils.service';
 import { Business } from '../interfaces/business.inteface';
 import { BusinessService } from '../services/business.service';
-import { Router} from '@angular/router';
+import { ActivatedRoute, Router} from '@angular/router';
 import * as ethers from 'ethers';
 
 declare var window: any
@@ -54,12 +54,34 @@ export class RegisterComponent implements OnInit {
   
   status: string = "";
 
+  businessToEdit: Business = {
+    distance: 0,
+    name: '',
+    images: [],
+    email: '',
+    phone: '',
+    description: '',
+    sectors: [],
+    job: '',
+    latitude: '',
+    longitude: '',
+    city: '',
+    country: '',
+    web: '',
+    online: false,
+    owner: ''
+  }
+  hasBusinessToEdit: boolean = false;
+
   constructor(
     private utils: UtilsService,
     private businessService: BusinessService,
-    private router: Router) {  }
+    private router: Router,
+    private route: ActivatedRoute,) {  }
 
   ngOnInit(): void {
+    this.getDataToEdit();
+    
     this.currentLatitude = localStorage.getItem('currentLatitude');
     this.currentLongitude = localStorage.getItem('currentLongitude');
 
@@ -73,6 +95,26 @@ export class RegisterComponent implements OnInit {
     }
 
     this.setMap();
+  }
+
+  getDataToEdit(){  
+    if(this.route.snapshot.params['_id'] != undefined){
+      this.hasBusinessToEdit = true;
+console.log(this.route.snapshot.params['online']);
+      this.name = this.route.snapshot.params['name'];
+      this.city = this.route.snapshot.params['city'];
+      this.country = this.route.snapshot.params['country'];
+      this.description = this.route.snapshot.params['description'];
+      this.email = this.route.snapshot.params['email'];
+      this.latitude = this.route.snapshot.params['latitude'];
+      this.longitude = this.route.snapshot.params['longitude'];
+      this.images = this.route.snapshot.params['images'];
+      this.job = this.route.snapshot.params['job'];
+      this.onlineService = this.route.snapshot.params['online'];
+      this.phone = this.route.snapshot.params['phone'];
+      this.sectors = this.route.snapshot.params['sectors'];
+      this.web = this.route.snapshot.params['web'];
+    }
   }
 
   removeMarkers(){
@@ -117,6 +159,10 @@ export class RegisterComponent implements OnInit {
 
       this.markers.push(newMarker);
     });
+
+    if(this.route.snapshot.params['_id'] != undefined){
+      this.setMarker(this.route.snapshot.params['latitude'], this.route.snapshot.params['longitude']);
+    }
   }
 
   async getWallet() {
@@ -137,6 +183,7 @@ export class RegisterComponent implements OnInit {
   }
 
   showBusiness(){
+    localStorage.setItem('wallet', this.wallet);
     this.router.navigate(["/misNegocios"]);
   }
 
@@ -157,103 +204,125 @@ export class RegisterComponent implements OnInit {
     this.status = "";
     
     if(this.name && this.email && this.sectors.length > 0 && this.city && this.country){
-      let numOfDocs = await this.businessService.getNumOfTotalBusiness();
+      if(this.hasBusinessToEdit){
+        switch (true) {
+          case (this.web.substring(0, 11) == "http://www."):
+            break;
+          case (this.web.substring(0, 7) == "http://"):
+            this.web = "http://www." + this.web.substring(7);
+            break;
+          case (this.web.substring(0, 4) == "www."):
+            this.web = "http://www." + this.web.substring(4);
+            break;
+          case (this.web.substring(0, 12) == "https://www."):
+            this.web = "http://www." + this.web.substring(12);
+            break;
+          case (this.web.substring(0, 8) == "https://"):
+            this.web = "http://www." + this.web.substring(8);
+            break;
+          default:
+            this.web = "http://www." + this.web;
+            break;
+        }
 
-      switch (true) {
-        case (this.web.substring(0, 11) == "http://www."):
-          break;
-        case (this.web.substring(0, 7) == "http://"):
-          this.web = "http://www." + this.web.substring(7);
-          break;
-        case (this.web.substring(0, 4) == "www."):
-          this.web = "http://www." + this.web.substring(4);
-          break;
-        case (this.web.substring(0, 12) == "https://www."):
-          this.web = "http://www." + this.web.substring(12);
-          break;
-        case (this.web.substring(0, 8) == "https://"):
-          this.web = "http://www." + this.web.substring(8);
-          break;
-        default:
-          this.web = "http://www." + this.web;
-          break;
-      }
+        this.businessToEdit = {
+          _id: this.route.snapshot.params['_id'],
+          distance: this.route.snapshot.params['distance'],
+          name: this.name,
+          images: this.images,
+          email: this.email,
+          phone: this.phone,
+          description: this.description,
+          sectors: this.sectors,
+          job: this.job,
+          latitude: this.latitude,
+          longitude: this.longitude,
+          city: this.city,
+          country: this.country,
+          web: this.web,
+          online: this.onlineService,
+          owner: this.route.snapshot.params['owner']
+        }
 
-      let newBusiness: Business = {
-        distance: 0,
-        id: numOfDocs + 1,
-        name: this.name,
-        images: this.images,
-        email: this.email,
-        phone: this.phone,
-        description: this.description,
-        sectors: this.sectors,
-        job: this.job,
-        latitude: this.latitude,
-        longitude: this.longitude,
-        city: this.city,
-        country: this.country,
-        web: this.web,
-        online: this.onlineService,
-        rating: 0,
-        owner: this.wallet
-      }
-      
-
-      let res = await (this.businessService.addBusiness(newBusiness));
-      console.log(res);
-      if(res.added){
-        alert("Tu negocio ha sido añadido correctamente");
-        this.router.navigate(['/comercios']);
+        let res = await (this.businessService.editBusiness(this.businessToEdit));
+        
+        if(res.acknowledged){
+          alert("Tu negocio ha sido modificado correctamente");
+          this.router.navigate(['/misNegocios']);
+        } else {
+          alert("Ha habido un error al modificar tu negocio, por favor, vuelve a intentarlo y si el error persiste, comunicate con nosotros.");
+        }
       } else {
-        alert("Ha habido un error al crear tu negocio, por favor, vuelve a intentarlo y si el error persiste, comunicate con nosotros.");
-      }
+        if(this.web){
+          switch (true) {
+            case (this.web.substring(0, 11) == "http://www."):
+              break;
+            case (this.web.substring(0, 7) == "http://"):
+              this.web = "http://www." + this.web.substring(7);
+              break;
+            case (this.web.substring(0, 4) == "www."):
+              this.web = "http://www." + this.web.substring(4);
+              break;
+            case (this.web.substring(0, 12) == "https://www."):
+              this.web = "http://www." + this.web.substring(12);
+              break;
+            case (this.web.substring(0, 8) == "https://"):
+              this.web = "http://www." + this.web.substring(8);
+              break;
+            default:
+              this.web = "http://www." + this.web;
+              break;
+          }
+        }
+        
 
-      
+        let newBusiness: Business = {
+          distance: 0,
+          name: this.name,
+          images: this.images,
+          email: this.email,
+          phone: this.phone,
+          description: this.description,
+          sectors: this.sectors,
+          job: this.job,
+          latitude: this.latitude,
+          longitude: this.longitude,
+          city: this.city,
+          country: this.country,
+          web: this.web,
+          online: this.onlineService,
+          owner: this.wallet
+        }
+        
+
+        let res = await (this.businessService.addBusiness(newBusiness));
+        if(res.added){
+          alert("Tu negocio ha sido añadido correctamente");
+          this.router.navigate(['/comercios']);
+        } else {
+          alert("Ha habido un error al crear tu negocio, por favor, vuelve a intentarlo y si el error persiste, comunicate con nosotros.");
+        }
+      }      
     } else {
       this.status = "Por favor, rellena los campos obligatorios (*)";
     }
   }
 
-  async fillBBDD(){
-    let API_URL = "http://localhost:8080/api/business/addBusiness";
-    for (let i = 100; i < 400; i++) {
-      let _datos = {
-        "id": i,
-        "name": "Santa comida",
-        "images": ["../../assets/img/metamask-mapamask.jpg"],
-        "email": "santacomida@cryptospace.es",
-        "phone": "656748839",
-        "description": "Local de comidas preparadas en castellón",
-        "sector": "ocioRestauracion",
-        "job": "Comidas preparadas",
-        "latitude": "39.9808094",
-        "longitude": "-0.0333288",
-        "city": "Castellon",
-        "web": "https://www.cryptospace.es",
-        "rating": 3
-      }
-
-      await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify(_datos),
-        headers: {"Content-type": "application/json; charset=UTF-8"}
-      })
-    }
-  }
-
   getCheckboxes(){
-    this.sectors = [];
-    for (let i = 0; i < this.indexes.length; i++) {
-      if(this.indexes[i] == true){
-        this.sectors.push(this.sectorsData[i].name)
+    if(!this.hasBusinessToEdit){
+      this.sectors = [];
+      for (let i = 0; i < this.indexes.length; i++) {
+        if(this.indexes[i] == true){
+          this.sectors.push(this.sectorsData[i].name)
+        }
+      }
+      if(this.sectors.length > 0){
+        this.buttonPlaceholder =  "Ver sectores seleccionados";
+      } else {
+        this.buttonPlaceholder =  "Selecciona tus sectores…*";
       }
     }
-    if(this.sectors.length > 0){
-      this.buttonPlaceholder =  "Ver sectores seleccionados";
-    } else {
-      this.buttonPlaceholder =  "Selecciona tus sectores…*";
-    }
+    
     
   }
 

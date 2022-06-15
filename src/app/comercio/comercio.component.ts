@@ -11,9 +11,8 @@ import { BusinessService } from '../services/business.service';
 export class ComercioComponent implements OnInit {
 
   error: string = "";
-  businessId: number = this.route.snapshot.params['id'];
+  businessId: string = this.route.snapshot.params['id'];
   business: Business = {
-      id: 0,
       name: "",
       images: [],
       email: "",
@@ -26,7 +25,6 @@ export class ComercioComponent implements OnInit {
       city: "",
       country: "",
       web: "",
-      rating: 0,
       online: false,
       distance: 0,
       owner: "0x0000000000000000000000000000000000000000"

@@ -6,29 +6,29 @@
             </div>
         </div>
 
-        <div class="row mt-2">
+        <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 info">
-                <h1 class="subtitle">Aceptan cryptos</h1>
+                <h1 class="subtitle">aceptan cryptos</h1>
             </div>
         </div>
 
-        <div class="row mt-3">
+        <div class="row mt-1">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 info">
                 <p class="">Empieza a usar tus criptomonedas en el mundo real.</p>
             </div>
         </div>
     
-        <div class="row">
+        <div class="row mt-3">
 
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" [ngClass]="width >= 768 ? 'start' : 'center'">
-                <select [(ngModel)]="sectorInput" name="sector" id="sector" class="search-input">
+                <select (keydown)="keyDown($event)" [(ngModel)]="sectorInput" name="sector" id="sector" class="search-input">
                     <option selected>Sector…</option>
                     <option *ngFor="let sector of sectorsData" [value]="sector.name">{{sector.name}}</option>
                 </select>
             </div>
         
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" [ngClass]="width >= 768 ? 'start' : 'center'">
-                <input [(ngModel)]="keywordInput" placeholder="Palabra clave" type="text" class="search-input">
+                <input (keydown)="keyDown($event)" [(ngModel)]="keywordInput" placeholder="Palabra clave" type="text" class="search-input">
             </div>
         
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" [ngClass]="width >= 768 ? 'start' : 'center'">

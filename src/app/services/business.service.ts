@@ -102,11 +102,31 @@ export class BusinessService {
   async addBusiness(business: Business){
     let addBusinessEndpoint = environment.API_URL + "addBusiness";
 
-    return await (await axios.post(addBusinessEndpoint, business)).data;
+    return (await axios.post(addBusinessEndpoint, business)).data;
   }
   
-  async getBusinessById(id: number): Promise<Business>{
-    let getBusinessEndpoint = environment.API_URL + "business/" + id;
+  async getBusinessById(id: string): Promise<Business>{
+    let getBusinessEndpoint = `${environment.API_URL}business/${id}`;
     return (await axios.get(getBusinessEndpoint)).data;
+  }
+
+  async deleteBusiness(businessId: string){
+    let deleteBusinessEndpoint = `${environment.API_URL}deleteBusiness/${businessId}`;
+    return (await axios.delete(deleteBusinessEndpoint)).data;
+  }
+
+  async editBusiness(businessEdited: Business){
+    let editBusinessEndpoint = `${environment.API_URL}editBusiness/${businessEdited._id}`;
+    return (await axios.post(editBusinessEndpoint, businessEdited)).data;
+  }
+
+  async getBusinessByWallet(searchWallet: string){
+    let searchBusinessEndPoint = `${environment.API_URL}/walletSearch/${searchWallet}`;
+    return (await axios.get(searchBusinessEndPoint, {
+      params: {
+        wallet: searchWallet
+      }
+    })).data;
+
   }
 }

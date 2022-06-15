@@ -1,43 +1,43 @@
 <div class="background">
   <div class="container">
-    <div class="row mt-5">
-      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 center">
-          <h3>Rellena el siguiente formulario...</h3>
+    <div *ngIf="!hasBusinessToEdit;else notBusinessToEdit">
+    
+      <div class="row mt-5">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 center">
+            <h3 style="color: #ffffff;">Rellena el siguiente formulario</h3>
+        </div>
       </div>
-    </div>
   
-    <div class="row">
-      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 center">
-          <h3 style="color: #ffffff;">¡y acepta cryptos en tu negocio!</h3>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
-        <h4>Conecta tu wallet de Metamask antes de añadir tu negocio para poder editarlo o borrarlo más tarde.</h4>
-      </div>
-    </div>
-
-    <div *ngIf="!connected; else isConnected" class="row mt-3">
-      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
-        <button class="mapamask-btn" (click)="connectWallet()">Conectar Wallet</button>
-      </div>
-    </div>
-
-    <ng-template #isConnected>
-      <div class="row mt-3">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
-          <button class="mapamask-btn" (click)="showBusiness()">Ver mis negocios</button>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
+          <h4 style="font-family: 'Montserrat'; font-size: 1.3rem;">Conecta tu Metamask para estar verificado y poder editar tu ficha</h4>
         </div>
       </div>
 
-      <div class="row mt-2">
+      <div *ngIf="!connected; else isConnected" class="row mt-3">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
-          <h5>Wallet connected: {{ wallet.substring(0,5) }} … {{ wallet.substring(wallet.length-5) }}</h5>
+          <button class="mapamask-btn" (click)="connectWallet()">Conectar Wallet</button>
+        </div>
+      </div>
+  
+      <ng-template #isConnected>
+        <div class="row mt-3">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
+            <button class="mapamask-btn" (click)="showBusiness()">Ver mis negocios</button>
+          </div>
+        </div>
+      </ng-template>
+
+    </div>
+
+    <ng-template #notBusinessToEdit>
+      <div class="row mt-5">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 center">
+            <h3>Aquí está tu ficha de Mapamask.io</h3>
         </div>
       </div>
     </ng-template>
-
+    
   </div>
 </div>
 <div class="container register-container">
@@ -143,9 +143,8 @@
 
 <div class="row">
   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
-    <button class="mapamask-btn" (click)="sendRegisterRequest()">Enviar</button>
-    <!-- <button style="margin-left: 10px;" class="mapamask-btn" (click)="showAtMap(number, street, cp, city, country)">Comprobar dirección</button> -->
-    <!-- <button (click)="fillBBDD()">Fill BBDD</button> -->
+    <button *ngIf="!hasBusinessToEdit" class="mapamask-btn" (click)="sendRegisterRequest()">Enviar</button>
+    <button *ngIf="hasBusinessToEdit" class="mapamask-btn" (click)="sendRegisterRequest()">Actualizar negocio</button>
   </div>
 </div>
 
@@ -162,7 +161,7 @@
           <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-6" *ngFor="let sector of sectorsData;let i=index">
             <div class="checkbox">
               <label class="checkbox-wrapper">
-                <input [value]="sector.name" [(ngModel)]="indexes[i]" type="checkbox" class="checkbox-input" />
+                <input [value]="sector.name" [(ngModel)]="indexes[i]" type="checkbox" class="sector-checkbox checkbox-input" />
                 <span class="checkbox-tile">
                   <span class="checkbox-label">{{sector.name}}</span>
                 </span>
