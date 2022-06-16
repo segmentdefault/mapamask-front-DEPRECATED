@@ -101,24 +101,15 @@ export class ComerciosComponent implements OnInit {
   }
 
   async getBusiness(){
-    this.business = this.utils.getAndSaveAllDistances(await this.businessService.getAllBusiness(), this.currentLatitude, this.currentLongitude);
-    this.orderBusinessByDistance();
-  }
-
-  orderBusinessByDistance(){
-    if(this.currentLatitude != 0 && this.currentLongitude != 0){
-      this.business.sort((a: Business,b: Business) => {
-        if(a.distance < b.distance){
-          return -1;
-        }
-  
-        if(a.distance > b.distance){
-          return 1;
-        }
-  
-        return 0;
-      })
-    }
+    return this.utils.orderBusinessByDistance(
+      await this.utils.getAndSaveAllDistances(
+        await this.businessService.getAllBusiness(), 
+        this.currentLatitude, 
+        this.currentLongitude
+      ), 
+      this.currentLatitude, 
+      this.currentLongitude
+    );
   }
 
   async nextPage(){
@@ -187,7 +178,15 @@ export class ComerciosComponent implements OnInit {
        
         if(this.businessSearch.length > 0){
           this.business = this.businessSearch;
-          this.utils.getAndSaveAllDistances(this.business, this.currentLatitude, this.currentLongitude);
+          this.utils.orderBusinessByDistance(
+            this.utils.getAndSaveAllDistances(
+              this.business, 
+              this.currentLatitude, 
+              this.currentLongitude
+            ),
+          this.currentLatitude,
+          this.currentLongitude);
+          
           this.setMarkers();
           this.map.flyTo([this.currentLatitude, this.currentLongitude], 6);
         } else {
@@ -213,9 +212,7 @@ export class ComerciosComponent implements OnInit {
       this.removeMarkers();
     }
 
-    await this.getBusiness();
-    
-    this.searchLoading = false;
+    this.business = await this.getBusiness();
 
     if(this.currentLatitude && this.currentLongitude){
       this.map = L.map('map').setView([this.currentLatitude, this.currentLongitude], 6);
@@ -234,6 +231,8 @@ export class ComerciosComponent implements OnInit {
     Jawg_Sunny.addTo(this.map);
 
     this.setMarkers();
+
+    this.searchLoading = false;
   }
 
   setMarkers(){

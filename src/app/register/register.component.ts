@@ -100,7 +100,7 @@ export class RegisterComponent implements OnInit {
   getDataToEdit(){  
     if(this.route.snapshot.params['_id'] != undefined){
       this.hasBusinessToEdit = true;
-console.log(this.route.snapshot.params['online']);
+
       this.name = this.route.snapshot.params['name'];
       this.city = this.route.snapshot.params['city'];
       this.country = this.route.snapshot.params['country'];
@@ -108,7 +108,7 @@ console.log(this.route.snapshot.params['online']);
       this.email = this.route.snapshot.params['email'];
       this.latitude = this.route.snapshot.params['latitude'];
       this.longitude = this.route.snapshot.params['longitude'];
-      this.images = this.route.snapshot.params['images'];
+      this.images[0] = this.route.snapshot.params['images'];
       this.job = this.route.snapshot.params['job'];
       this.onlineService = this.route.snapshot.params['online'];
       this.phone = this.route.snapshot.params['phone'];

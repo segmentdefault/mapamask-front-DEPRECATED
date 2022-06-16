@@ -66,4 +66,15 @@ export class UtilsService {
 
     return business;
   }
+
+  orderBusinessByDistance(business: Business[], currentLatitude: number, currentLongitude: number){
+    if(currentLatitude != 0 && currentLongitude != 0){
+
+      business.sort(function(a,b) {
+        return a.distance.toString().localeCompare(b.distance.toString(), undefined, {'numeric': true});
+      })
+      return business;
+    }
+    return business;
+  }
 }
