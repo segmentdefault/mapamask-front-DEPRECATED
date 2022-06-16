@@ -1,9 +1,8 @@
 import { Component, OnInit, Sanitizer } from '@angular/core';
-import { Router } from '@angular/router';
 import * as L  from 'leaflet';
 import 'leaflet.markercluster';
 import 'leaflet-coordinates-control';
-/* import 'L.Control.Coordinates.css'; */
+import * as fs from 'fs';
 import { BusinessService } from '../services/business.service';
 import municipiosList from '../../assets/data/municipios.json';
 import provinciasList from '../../assets/data/provincias.json';
@@ -243,45 +242,11 @@ export class ComerciosComponent implements OnInit {
     });
 
     this.business.forEach((item: Business) => {
+
       if(item.latitude && item.longitude){
         let popup = L.popup({
           closeButton: false
-        }).setContent(`
-          <div class="row">
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
-              <h5 style="font-weight: bold; color: rgb(0, 0, 0); font-family: 'Montserrat';">
-                ${item.name}, ${item.job}
-              </h5>
-            </div>
-          </div>
-          
-          <div class="row">
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-sm-6 col-6 end-vertically">
-              <h6 style="font-weight: bold; color: rgb(0, 0, 0); font-family: 'Montserrat';">
-                ${item.distance}Km
-              </h6>
-            </div>
-            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-sm-3 col-3 end">
-              <a style="
-                border-radius: 10px;
-                border: 0;
-                background-color: #f7911d;
-                color: #ffffff;
-                padding: 5px;
-                text-decoration: none;"
-                href='https://www.google.com/maps/dir/${this.currentLatitude},${this.currentLongitude}/${item.latitude},${item.longitude}' target='_blank'><i class="fa-solid fa-diamond-turn-right fa-xl"></i></a>
-            </div>
-            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-sm-3 col-3 end">
-              <a style="
-                border-radius: 10px;
-                border: 0;
-                text-decoration: none;
-                margin-left: 5px;"
-                href='https://www.google.com/search?q=${item.name}+${item.city}' target='_blank'><img style='width: 30px;' src="../../assets/img/google-logo.png" alt="google logo"></a>
-            </div>
-          </div>
-          
-        `);
+        }).setContent(this.getPopupTemplate(item));
         
         
   
@@ -306,6 +271,273 @@ export class ComerciosComponent implements OnInit {
 
   counter(i: number) {
     return new Array(i);
+  }
+
+  getPopupTemplate(item: Business){
+    if(item.owner != "0x0000000000000000000000000000000000000000"){
+      if(item.discount > 0){
+        return `
+        <div class="row">
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-sm-3 col-3">
+            <img style="margin-bottom: 10px;" width="100%" src="${item.images[0]}">
+          </div>
+
+          <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-sm-9 col-9">
+            <div class="row">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+                <h5 style="font-weight: bold;font-size: 15pt color: #804517; font-family: 'Montserrat';">
+                  ${item.name}
+                </h5>
+              </div>
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+                <h6 style="font-weight: bold; font-size: 12pt; color: rgb(0, 0, 0); font-family: 'Montserrat';">
+                  ${item.job}
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr style="margin-bottom: 6px;margin-top: 2px;">
+
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+            <h6 style="font-weight: bold; font-size: 12pt; color: rgb(0, 0, 0); font-family: 'Montserrat';">
+              <a  style="color: #934f00;" href="${item.web}" target="_blank">${item.web.substring(11)}</a>
+            </h6>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+            <h6 style="font-weight: bold; font-size: 12pt; color: rgb(0, 0, 0); font-family: 'Montserrat';">
+              ${item.email} | ${item.phone}
+            </h6>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+            <h6 style="font-weight: bold; font-size: 12pt; color: #f7911d; font-family: 'Montserrat-bold';">
+              Descuento: -${item.discount}%
+            </h6>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-sm-8 col-8 end-vertically">
+            <h6 style="font-weight: bold; color: rgb(0, 0, 0); font-family: 'Montserrat';">
+              ${item.distance}Km
+            </h6>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-sm-2 col-2 end">
+            <a style="
+              border-radius: 10px;
+              border: 0;
+              background-color: #f7911d;
+              color: #ffffff;
+              padding: 5px;
+              text-decoration: none;"
+              href='https://www.google.com/maps/dir/${this.currentLatitude},${this.currentLongitude}/${item.latitude},${item.longitude}' target='_blank'><i class="fa-solid fa-diamond-turn-right fa-xl"></i></a>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-sm-2 col-2 end">
+            <img style='width: 30px;' src="../../assets/img/metamask-verified.png" alt="metamask verified">
+          </div>
+        </div>
+        `
+      } else {
+        return `
+        <div class="row">
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-sm-3 col-3">
+            <img style="margin-bottom: 10px;" width="100%" src="${item.images[0]}">
+          </div>
+
+          <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-sm-9 col-9">
+            <div class="row">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+                <h5 style="font-weight: bold;font-size: 15pt color: #804517; font-family: 'Montserrat';">
+                  ${item.name}
+                </h5>
+              </div>
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+                <h6 style="font-weight: bold; font-size: 12pt; color: rgb(0, 0, 0); font-family: 'Montserrat';">
+                  ${item.job}
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr style="margin-bottom: 6px;margin-top: 2px;">
+
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+            <h6 style="font-weight: bold; font-size: 12pt; color: rgb(0, 0, 0); font-family: 'Montserrat';">
+              <a  style="color: #934f00;" href="${item.web}" target="_blank">${item.web.substring(11)}</a>
+            </h6>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+            <h6 style="font-weight: bold; font-size: 12pt; color: rgb(0, 0, 0); font-family: 'Montserrat';">
+              ${item.email} | ${item.phone}
+            </h6>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-sm-8 col-8 end-vertically">
+            <h6 style="font-weight: bold; color: rgb(0, 0, 0); font-family: 'Montserrat';">
+              ${item.distance}Km
+            </h6>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-sm-2 col-2 end">
+            <a style="
+              border-radius: 10px;
+              border: 0;
+              background-color: #f7911d;
+              color: #ffffff;
+              padding: 5px;
+              text-decoration: none;"
+              href='https://www.google.com/maps/dir/${this.currentLatitude},${this.currentLongitude}/${item.latitude},${item.longitude}' target='_blank'><i class="fa-solid fa-diamond-turn-right fa-xl"></i></a>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-sm-2 col-2 end">
+            <img style='width: 30px;' src="../../assets/img/metamask-verified.png" alt="metamask verified">
+          </div>
+        </div>
+        `
+      }
+      
+    } else {
+      if(item.discount > 0){
+        return `
+        <div class="row">
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-sm-3 col-3">
+            <img style="margin-bottom: 10px;" width="100%" src="${item.images[0]}">
+          </div>
+
+          <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-sm-9 col-9">
+            <div class="row">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+                <h5 style="font-weight: bold;font-size: 15pt color: #804517; font-family: 'Montserrat';">
+                  ${item.name}
+                </h5>
+              </div>
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+                <h6 style="font-weight: bold; font-size: 12pt; color: rgb(0, 0, 0); font-family: 'Montserrat';">
+                  ${item.job}
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr style="margin-bottom: 6px;margin-top: 2px;">
+
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+            <h6 style="font-weight: bold; font-size: 12pt; color: rgb(0, 0, 0); font-family: 'Montserrat';">
+              <a style="color: #934f00;" href="${item.web}" target="_blank">${item.web.substring(11)}</a>
+            </h6>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+            <h6 style="font-weight: bold; font-size: 12pt; color: rgb(0, 0, 0); font-family: 'Montserrat';">
+              ${item.email} | ${item.phone}
+            </h6>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+            <h6 style="font-weight: bold; font-size: 12pt; color: #f7911d; font-family: 'Montserrat-bold';">
+              Descuento: -${item.discount}%
+            </h6>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-sm-9 col-9 end-vertically">
+            <h6 style="font-weight: bold; color: rgb(0, 0, 0); font-family: 'Montserrat';">
+              ${item.distance}Km
+            </h6>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-sm-2 col-2 end">
+            <a style="
+              border-radius: 10px;
+              border: 0;
+              background-color: #f7911d;
+              color: #ffffff;
+              padding: 5px;
+              text-decoration: none;"
+              href='https://www.google.com/maps/dir/${this.currentLatitude},${this.currentLongitude}/${item.latitude},${item.longitude}' target='_blank'><i class="fa-solid fa-diamond-turn-right fa-xl"></i></a>
+          </div>
+        </div>
+        `
+      } else {
+        return `
+        <div class="row">
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-sm-3 col-3">
+            <img style="margin-bottom: 10px;" width="100%" src="${item.images[0]}">
+          </div>
+
+          <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-sm-9 col-9">
+            <div class="row">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+                <h5 style="font-weight: bold;font-size: 15pt color: #804517; font-family: 'Montserrat';">
+                  ${item.name}
+                </h5>
+              </div>
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+                <h6 style="font-weight: bold; font-size: 12pt; color: rgb(0, 0, 0); font-family: 'Montserrat';">
+                  ${item.job}
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr style="margin-bottom: 6px;margin-top: 2px;">
+
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+            <h6 style="font-weight: bold; font-size: 12pt; color: rgb(0, 0, 0); font-family: 'Montserrat';">
+              <a style="color: #934f00;" href="${item.web}" target="_blank">${item.web.substring(11)}</a>
+            </h6>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 col-12">
+            <h6 style="font-weight: bold; font-size: 12pt; color: rgb(0, 0, 0); font-family: 'Montserrat';">
+              ${item.email} | ${item.phone}
+            </h6>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-sm-9 col-9 end-vertically">
+            <h6 style="font-weight: bold; color: rgb(0, 0, 0); font-family: 'Montserrat';">
+              ${item.distance}Km
+            </h6>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-sm-2 col-2 end">
+            <a style="
+              border-radius: 10px;
+              border: 0;
+              background-color: #f7911d;
+              color: #ffffff;
+              padding: 5px;
+              text-decoration: none;"
+              href='https://www.google.com/maps/dir/${this.currentLatitude},${this.currentLongitude}/${item.latitude},${item.longitude}' target='_blank'><i class="fa-solid fa-diamond-turn-right fa-xl"></i></a>
+          </div>
+        </div>
+        `
+      }
+    }
   }
 }
 

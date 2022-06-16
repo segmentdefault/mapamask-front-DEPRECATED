@@ -95,6 +95,7 @@
                             </div>
             
                         </div>
+
                         <div class="row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="padding-left: 20px;">
                                 <p>{{ businessItem.job }}</p>
@@ -103,6 +104,13 @@
                                 <p>{{ businessItem.phone }} | {{ businessItem.email }}</p>
                             </div>
                         </div>
+
+                        <div *ngIf="businessItem.online" class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="padding-left: 20px;">
+                                <p>Venta online <img width="20px" src="../../assets/img/tick-verde.png" alt="tick"></p>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" style="padding-left: 20px;">
                                 <p *ngIf="businessItem.distance != -1">{{ businessItem.distance }}Km</p>

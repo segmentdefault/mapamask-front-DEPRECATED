@@ -90,9 +90,11 @@ export class RegisterComponent implements OnInit {
     this.currentLatitude = localStorage.getItem('currentLatitude');
     this.currentLongitude = localStorage.getItem('currentLongitude');
 
-    window.ethereum.on('accountsChanged', () => {
-      this.getWallet();
-    });
+    if(window.ethereum){
+      window.ethereum.on('accountsChanged', () => {
+        this.getWallet();
+      });
+    }
 
     if(localStorage.getItem('connected') === "true"){
       this.connected = true;

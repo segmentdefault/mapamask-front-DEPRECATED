@@ -1,7 +1,16 @@
 <div class="background">
   <div class="container">
-    <div *ngIf="!hasBusinessToEdit;else notBusinessToEdit">
+    <div *ngIf="hasBusinessToEdit;else notBusinessToEdit">
     
+      <div class="row mt-5">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 center">
+            <h3>Aquí está tu ficha de Mapamask.io</h3>
+        </div>
+      </div>
+
+    </div>
+
+    <ng-template #notBusinessToEdit>
       <div class="row mt-5">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 center">
             <h3 style="color: #ffffff;">Rellena el siguiente formulario</h3>
@@ -27,15 +36,7 @@
           </div>
         </div>
       </ng-template>
-
-    </div>
-
-    <ng-template #notBusinessToEdit>
-      <div class="row mt-5">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 center">
-            <h3>Aquí está tu ficha de Mapamask.io</h3>
-        </div>
-      </div>
+      
     </ng-template>
     
   </div>
