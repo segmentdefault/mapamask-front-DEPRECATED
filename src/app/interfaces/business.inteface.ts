@@ -14,5 +14,6 @@ export interface Business{
     country: string,
     web: string,
     online: boolean,
-    owner: string
+    owner: string,
+    discount: number
 }

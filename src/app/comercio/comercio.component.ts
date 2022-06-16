@@ -27,7 +27,8 @@ export class ComercioComponent implements OnInit {
       web: "",
       online: false,
       distance: 0,
-      owner: "0x0000000000000000000000000000000000000000"
+      owner: "0x0000000000000000000000000000000000000000",
+      discount: 0
   }
   
   constructor(

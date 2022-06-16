@@ -60,7 +60,7 @@
   
     <div class="row">
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 end mt-3">
-        <button class="mapamask-btn-white" style="width: 100%;" data-bs-toggle="modal" data-bs-target="#selectSectorModal">{{ buttonPlaceholder }}</button>
+        <button class="mapamask-btn-white" style="width: 100%;" data-bs-toggle="modal" data-bs-target="#selectSectorModal">{{ buttonSectorPlaceholder }}</button>
       </div>
       <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 start mt-3">
           <input [(ngModel)]="job" type="text" placeholder="Especialidad">
@@ -80,8 +80,11 @@
     </div>
 
     <div class="row">
-      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 center mt-3">
         <input [(ngModel)]="web" type="text" placeholder="Web">
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 center mt-3">
+        <button class="mapamask-btn-white" style="width: 100%;" data-bs-toggle="modal" data-bs-target="#setDiscountModal">{{ buttonDiscountPlaceholder }}</button>
       </div>
     </div>
 
@@ -145,6 +148,90 @@
   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
     <button *ngIf="!hasBusinessToEdit" class="mapamask-btn" (click)="sendRegisterRequest()">Enviar</button>
     <button *ngIf="hasBusinessToEdit" class="mapamask-btn" (click)="sendRegisterRequest()">Actualizar negocio</button>
+  </div>
+</div>
+
+
+<!-- SET DISCOUNT MODAL -->
+<div class="modal fade" id="setDiscountModal" tabindex="-1" role="dialog" aria-labelledby="setDiscountModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Añadir descuento</h5>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <h6>¿Quieres añadir un descuento para fomentar el pago con cryptos?</h6>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6">
+            <div class="discount box">
+              <div class="checkbox">
+                <label class="checkbox-wrapper">
+                  <input (change)="hideInput()" [(ngModel)]="discount" value="5" name="discount" type="radio" class="sector-checkbox checkbox-input" />
+                  <span class="checkbox-tile">
+                    <span class="checkbox-label">5%</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6">
+            <div class="discount box">
+              <div class="checkbox">
+                <label class="checkbox-wrapper">
+                  <input (change)="hideInput()" [(ngModel)]="discount" value="10" name="discount" type="radio" class="sector-checkbox checkbox-input" />
+                  <span class="checkbox-tile">
+                    <span class="checkbox-label">10%</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6">
+            <div class="discount box">
+              <div class="checkbox">
+                <label class="checkbox-wrapper">
+                  <input (change)="hideInput()" [(ngModel)]="discount" value="21" name="discount" type="radio" class="sector-checkbox checkbox-input" />
+                  <span class="checkbox-tile">
+                    <span class="checkbox-label">21%</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6">
+            <div class="discount box">
+              <div class="checkbox">
+                <label class="checkbox-wrapper">
+                  <input (change)="showInput()" name="discount" type="radio" class="sector-checkbox checkbox-input" />
+                  <span class="checkbox-tile">
+                    <span class="checkbox-label">Otro…</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="customDiscount" class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
+            <input [(ngModel)]="discount" class="custom-discount" type="text"><span class="percentage"> %</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="getDiscount()">Aceptar</button>
+      </div>
+    </div>
   </div>
 </div>
 

@@ -2,13 +2,13 @@
     <div class="container">
         <div class="row mt-5">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 info">
-                <h1 class="title">El buscador de negocios que</h1>
+                <h1 class="title">El buscador de negocios</h1>
             </div>
         </div>
 
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 info">
-                <h1 class="subtitle">aceptan cryptos</h1>
+                <h1 class="subtitle">que aceptan cryptos</h1>
             </div>
         </div>
 
@@ -84,23 +84,34 @@
                             <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-8" style="padding-left: 20px;">
                                 <h3>{{ businessItem.name }}</h3>
                             </div>
+
                             <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-2 end center-vertically" style="padding: 0;">
-                                <a *ngIf="businessItem.distance != -1" href="https://www.google.com/maps/dir/{{currentLatitude}},{{currentLongitude}}/{{businessItem.latitude}},{{businessItem.longitude}}" target="_blank"><i class="fa-solid fa-diamond-turn-right fa-xl"></i></a>
+                                <img placement="top" ngbTooltip="Negocio verificado con metamask" tooltipClass="tooltip" *ngIf="businessItem.owner != '0x0000000000000000000000000000000000000000'" width="30px" src="../../assets/img/metamask-verified.png">
+                            </div>
+
+                            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-2 end center-vertically" style="padding: 10;">
+                                <a *ngIf="businessItem.distance != -1" placement="top" ngbTooltip="Obtener dirección" tooltipClass="tooltip" href="https://www.google.com/maps/dir/{{currentLatitude}},{{currentLongitude}}/{{businessItem.latitude}},{{businessItem.longitude}}" target="_blank"><i class="fa-solid fa-diamond-turn-right fa-xl"></i></a>
                                 <i *ngIf="businessItem.distance == -1" class="fa-solid fa-diamond-turn-right fa-xl" style="color: #737373; cursor: not-allowed;"></i>
                             </div>
-                            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-2 end center-vertically" style="padding: 0;">
-                                <a href="https://www.google.com/search?q={{businessItem.name}}+{{businessItem.city}}" target="_blank"><img class="google-logo" src="../../assets/img/google-logo.png" alt="google logo"></a>
-                            </div>
+            
                         </div>
                         <div class="row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="padding-left: 20px;">
                                 <p>{{ businessItem.job }}</p>
                                 <hr>
                                 <p><a [href]="businessItem.web" target="_blank">{{ businessItem.web.substring(11) }}</a></p>
-                                <p>{{ businessItem.phone }}</p>
-                                <p>{{ businessItem.email }}</p>
+                                <p>{{ businessItem.phone }} | {{ businessItem.email }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" style="padding-left: 20px;">
                                 <p *ngIf="businessItem.distance != -1">{{ businessItem.distance }}Km</p>
                                 <p *ngIf="businessItem.distance == -1">Geolocalización no activada</p>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" [ngClass]="width >= 768 ? 'end' : 'start'" style="padding-left: 20px;">
+                                <div>
+                                    <h6><label class="discount-info" *ngIf="businessItem.discount > 0" style="margin-right: 10px;">Descuento: -{{ businessItem.discount }}%</label></h6>
+                                </div>
                             </div>
                         </div>
                     </div>

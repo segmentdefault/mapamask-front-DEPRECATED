@@ -50,7 +50,11 @@ export class RegisterComponent implements OnInit {
   sectorsData: any = sectoresList;
   countriesData: any = countriesList;
 
-  buttonPlaceholder = "Selecciona tus sectores…*";
+  buttonSectorPlaceholder = "Selecciona tus sectores…*";
+  buttonDiscountPlaceholder = "Quieres ofrecer descuento?";
+
+  customDiscount: boolean = false;
+  discount: string = "0";
   
   status: string = "";
 
@@ -69,7 +73,8 @@ export class RegisterComponent implements OnInit {
     country: '',
     web: '',
     online: false,
-    owner: ''
+    owner: '',
+    discount: 0
   }
   hasBusinessToEdit: boolean = false;
 
@@ -114,7 +119,20 @@ export class RegisterComponent implements OnInit {
       this.phone = this.route.snapshot.params['phone'];
       this.sectors = this.route.snapshot.params['sectors'];
       this.web = this.route.snapshot.params['web'];
+      this.discount = this.route.snapshot.params['discount'];
     }
+  }
+
+  showInput(){
+    this.customDiscount = !this.customDiscount;
+  }
+
+  hideInput(){
+    this.customDiscount = false;
+  }
+
+  getDiscount(){
+    this.buttonDiscountPlaceholder = `Descuento seleccionado: ${this.discount}%`;
   }
 
   removeMarkers(){
@@ -241,7 +259,8 @@ export class RegisterComponent implements OnInit {
           country: this.country,
           web: this.web,
           online: this.onlineService,
-          owner: this.route.snapshot.params['owner']
+          owner: this.route.snapshot.params['owner'],
+          discount: parseInt(this.discount)
         }
 
         let res = await (this.businessService.editBusiness(this.businessToEdit));
@@ -275,7 +294,6 @@ export class RegisterComponent implements OnInit {
           }
         }
         
-
         let newBusiness: Business = {
           distance: 0,
           name: this.name,
@@ -291,9 +309,9 @@ export class RegisterComponent implements OnInit {
           country: this.country,
           web: this.web,
           online: this.onlineService,
-          owner: this.wallet
+          owner: this.wallet,
+          discount: parseInt(this.discount)
         }
-        
 
         let res = await (this.businessService.addBusiness(newBusiness));
         if(res.added){
@@ -317,9 +335,9 @@ export class RegisterComponent implements OnInit {
         }
       }
       if(this.sectors.length > 0){
-        this.buttonPlaceholder =  "Ver sectores seleccionados";
+        this.buttonSectorPlaceholder =  "Ver sectores seleccionados";
       } else {
-        this.buttonPlaceholder =  "Selecciona tus sectores…*";
+        this.buttonSectorPlaceholder =  "Selecciona tus sectores…*";
       }
     }
     
