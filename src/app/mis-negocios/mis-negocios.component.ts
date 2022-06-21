@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Business } from '../interfaces/business.inteface';
 import { BusinessService } from '../services/business.service';
+import { WalletService } from '../services/wallet.service';
+
+declare var window: any
 
 @Component({
   selector: 'app-mis-negocios',
@@ -11,17 +14,33 @@ import { BusinessService } from '../services/business.service';
 export class MisNegociosComponent implements OnInit {
 
   wallet: string = "";
-  ownBusiness: Array<any> = [];
+  ownBusiness: Array<Business> = [];
   searchLoading: boolean = true;
   idToRemove: string = "0";
+  connected: boolean = false;
 
   constructor(
     private businessService: BusinessService,
+    private walletService: WalletService,
     private router: Router,
   ) { }
 
   ngOnInit(): void {
-    this.wallet = localStorage.getItem('wallet')!;
+    if(window.ethereum){
+      window.ethereum.on('accountsChanged', async () => {
+        this.wallet = await this.walletService.getWallet();
+        localStorage.setItem('wallet', this.wallet);
+        window.location.reload();
+      });
+    }
+
+    if(localStorage.getItem('connected') === "true"){
+      this.connected = true;
+      this.walletService.getWallet().then((res: string) => {
+        localStorage.setItem('wallet', res);
+        this.wallet = res;
+      });
+    }
     this.getOwnBusiness();
   }
 
@@ -30,7 +49,12 @@ export class MisNegociosComponent implements OnInit {
   } 
 
   async getOwnBusiness(){
-    this.ownBusiness =  (await this.businessService.getBusinessByWallet(this.wallet));
+    let wallet = localStorage.getItem('wallet');
+
+    if(wallet && wallet != "0x0000000000000000000000000000000000000000"){
+      this.ownBusiness =  (await this.businessService.getBusinessByWallet(wallet));
+    }
+  
     this.searchLoading = false;
   }
 

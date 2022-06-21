@@ -120,13 +120,9 @@ export class BusinessService {
     return (await axios.post(editBusinessEndpoint, businessEdited)).data;
   }
 
-  async getBusinessByWallet(searchWallet: string){
-    let searchBusinessEndPoint = `${environment.API_URL}/walletSearch/${searchWallet}`;
-    return (await axios.get(searchBusinessEndPoint, {
-      params: {
-        wallet: searchWallet
-      }
-    })).data;
+  async getBusinessByWallet(walletToSearch: string){
+    let searchBusinessEndPoint = `${environment.API_URL}/walletSearch/${walletToSearch}`;
+    return (await axios.get(searchBusinessEndPoint)).data;
 
   }
 }

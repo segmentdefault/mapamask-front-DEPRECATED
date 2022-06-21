@@ -10,6 +10,7 @@ import { Business } from '../interfaces/business.inteface';
 import { BusinessService } from '../services/business.service';
 import { ActivatedRoute, Router} from '@angular/router';
 import * as ethers from 'ethers';
+import { WalletService } from '../services/wallet.service';
 
 declare var window: any
 
@@ -81,6 +82,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private utils: UtilsService,
     private businessService: BusinessService,
+    private walletService: WalletService,
     private router: Router,
     private route: ActivatedRoute,) {  }
 
@@ -90,15 +92,13 @@ export class RegisterComponent implements OnInit {
     this.currentLatitude = localStorage.getItem('currentLatitude');
     this.currentLongitude = localStorage.getItem('currentLongitude');
 
-    if(window.ethereum){
-      window.ethereum.on('accountsChanged', () => {
-        this.getWallet();
-      });
-    }
-
     if(localStorage.getItem('connected') === "true"){
       this.connected = true;
-      this.getWallet();
+    }
+    
+    let LSwallet = localStorage.getItem('wallet');
+    if(LSwallet){
+      this.wallet = LSwallet;
     }
 
     this.setMap();
@@ -185,25 +185,14 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  async getWallet() {
-    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    const signer = provider.getSigner();
-    this.wallet = await signer.getAddress();
-  }
-
   async connectWallet(){
-    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    let res = (await this.walletService.connectWallet());
     
-    await provider.send("eth_requestAccounts", []);
-    const signer = provider.getSigner();
-    
-    this.wallet = await signer.getAddress();
-    this.connected = true;
-    localStorage.setItem("connected", "true");
+    this.wallet = res.wallet;
+    this.connected = res.connected
   }
 
   showBusiness(){
-    localStorage.setItem('wallet', this.wallet);
     this.router.navigate(["/misNegocios"]);
   }
 
