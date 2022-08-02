@@ -318,7 +318,7 @@ export class RegisterComponent implements OnInit {
         }
       }      
     } else {
-      this.status = "Por favor, rellena los campos obligatorios (*)";
+      this.status = this.translate.instant('pleasefillall');
     }
   }
 

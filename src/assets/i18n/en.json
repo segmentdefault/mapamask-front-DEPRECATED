@@ -1,4 +1,6 @@
 {
+    "title": "Mapamask | Explore the businesses in your area",
+    "chooselanguage": "Choose a language",
     "business": "Business",
     "calculator": "Calculator",
     "tutorial": "Tutorial",
@@ -55,6 +57,7 @@
     "street": "Street",
     "number": "Number",
     "postcode": "Postcode",
+    "pleasefillall": "Please, refill all the mandatory fields (*)",
     "checkbusiness": "Check my account",
     "nobusiness": "There are no businesses related to this wallet",
     "send": "Send",

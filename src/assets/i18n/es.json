@@ -1,4 +1,6 @@
 {
+    "title": "Mapamask | Explora los comercios de tu zona",
+    "chooselanguage": "Elige un idioma",
     "business": "Comercios",
     "calculator": "Calculadora",
     "tutorial": "Tutorial",
@@ -55,6 +57,7 @@
     "street": "Calle",
     "number": "Número",
     "postcode": "Cod. postal",
+    "pleasefillall": "Por favor, rellena los campos obligatorios (*)",
     "checkbusiness": "Ver mis negocios",
     "nobusiness": "No existen negocios creados con la wallet Conectada",
     "send": "Enviar",

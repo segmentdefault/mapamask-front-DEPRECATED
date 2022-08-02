@@ -38,6 +38,25 @@ span{
     background-color: #f7911d;
 }
 
+
+.language-flag{
+    width: 35px;
+    height: auto;
+}
+
+.select-language{
+    background: transparent;
+    border: 0;
+    margin-left: 10px;
+}
+
+.modal-footer{
+    button{
+        background-color: #f7911d;
+        border-color: #f7911d;
+    }
+}
+
 @media (max-width: 991px){
     .nav-link-btn{
         padding: 5px 10px 5px 10px;

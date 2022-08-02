@@ -27,6 +27,9 @@
               <li class="nav-item">
                 <a class="nav-link-btn" [routerLink]="['/registro']" routerLinkActive="active">{{'businessAccount' | translate}}</a>
               </li>
+              <li class="nav-item">
+                <button data-bs-toggle="modal" data-bs-target="#setLanguageModal" class="select-language"><img class="language-flag" src="../assets/img/languages/{{langSelected.toUpperCase()}}-icon.png" alt=""><strong>{{langSelected.toUpperCase()}}</strong></button>
+              </li>
             </ul>
           </div>
         </div>
@@ -43,5 +46,31 @@
         Powered by <img src="../assets/img/CryptoSpace-logo.png" width="50px" alt="">
       </p>
     </a>
+  </div>
+</div>
+
+<!-- SECTOR SELECTION MODAL -->
+<div class="modal fade" id="setLanguageModal" tabindex="-1" role="dialog" aria-labelledby="setLanguageModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{'chooselanguage' | translate}}</h5>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
+            <button (click)="changeLanguage('EN')" class="select-language"><img src="../assets/img/languages/EN-icon.png" alt="en flag"><strong>EN</strong></button>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
+            <button (click)="changeLanguage('ES')" class="select-language"><img src="../assets/img/languages/ES-icon.png" alt="es flag"><strong>ES</strong></button>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="reload()">{{'accept' | translate}}</button>
+      </div>
+    </div>
   </div>
 </div>
