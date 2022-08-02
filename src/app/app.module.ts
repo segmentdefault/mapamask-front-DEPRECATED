@@ -14,7 +14,15 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { SanitizeURLPipe } from './pipes/sanitize-url.pipe';
 import { MisNegociosComponent } from './mis-negocios/mis-negocios.component';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+import { SharedModule } from './shared/shared.module';
 
+export function HttpLoaderFactory(http:HttpClient) {
+  return new TranslateHttpLoader(http, "../assets/i18n/", ".json");
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,6 +37,7 @@ import { MisNegociosComponent } from './mis-negocios/mis-negocios.component';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     NgbModule,
     FormsModule,
@@ -37,7 +46,15 @@ import { MisNegociosComponent } from './mis-negocios/mis-negocios.component';
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
-    })
+    }),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps:[HttpClient]
+      }
+    }),
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]

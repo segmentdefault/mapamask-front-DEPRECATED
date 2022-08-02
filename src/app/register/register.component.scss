@@ -146,6 +146,17 @@ input, textarea, select{
     margin-left: 10px;
 }
 
+.img-input{
+    border: 0;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid #000000;
+    padding: 10px 20px 20px 20px;
+    background-color: #ffffff;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
 @media (max-width: 1150px){
     .register-container{
         width: 100%;

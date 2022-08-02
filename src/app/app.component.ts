@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { Position } from './interfaces/position.interface';
 import { UtilsService } from './services/utils.service';
@@ -11,9 +12,16 @@ import { UtilsService } from './services/utils.service';
 export class AppComponent {
   title = 'Mapamask';
 
-  constructor(){}
+  constructor(private translate: TranslateService){
+    this.setAppLanguaje();
+  }
 
   ngOnInit(): void {
+  }
+
+  setAppLanguaje(){
+    this.translate.setDefaultLang('en');
+    this.translate.use(this.translate.getBrowserLang()!);
   }
   
 }

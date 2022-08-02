@@ -11,6 +11,7 @@ import { BusinessService } from '../services/business.service';
 import { ActivatedRoute, Router} from '@angular/router';
 import * as ethers from 'ethers';
 import { WalletService } from '../services/wallet.service';
+import { TranslateService } from '@ngx-translate/core';
 
 declare var window: any
 
@@ -51,12 +52,14 @@ export class RegisterComponent implements OnInit {
   sectorsData: any = sectoresList;
   countriesData: any = countriesList;
 
-  buttonSectorPlaceholder = "Selecciona tus sectores…*";
-  buttonDiscountPlaceholder = "Quieres ofrecer descuento?";
+  buttonSectorPlaceholder = this.translate.instant('sectors') + "…*";
+  buttonDiscountPlaceholder = this.translate.instant('discountoffer');
 
   customDiscount: boolean = false;
   discount: string = "0";
   
+  imageselected: string = "";
+
   status: string = "";
 
   businessToEdit: Business = {
@@ -84,9 +87,11 @@ export class RegisterComponent implements OnInit {
     private businessService: BusinessService,
     private walletService: WalletService,
     private router: Router,
-    private route: ActivatedRoute,) {  }
+    private route: ActivatedRoute,
+    private translate: TranslateService) {  }
 
   ngOnInit(): void {
+    this.countriesData.sort();
     this.getDataToEdit();
     
     this.currentLatitude = localStorage.getItem('currentLatitude');
@@ -134,7 +139,7 @@ export class RegisterComponent implements OnInit {
   }
 
   getDiscount(){
-    this.buttonDiscountPlaceholder = `Descuento seleccionado: ${this.discount}%`;
+    this.buttonDiscountPlaceholder = `${this.translate.instant('viewdiscount')}: ${this.discount}%`;
   }
 
   removeMarkers(){
@@ -198,7 +203,7 @@ export class RegisterComponent implements OnInit {
 
   saveImage(event: Event) {
     let files: any = event;
-    
+    this.imageselected = files.target.files[0].name;
     for (let i = 0; i < files.target.files.length; i++) {
       let myReader:any = new FileReader();
 
@@ -326,9 +331,9 @@ export class RegisterComponent implements OnInit {
         }
       }
       if(this.sectors.length > 0){
-        this.buttonSectorPlaceholder =  "Ver sectores seleccionados";
+        this.buttonSectorPlaceholder =  this.translate.instant('viewsectors');
       } else {
-        this.buttonSectorPlaceholder =  "Selecciona tus sectores…*";
+        this.buttonSectorPlaceholder =  this.translate.instant('sectors') + "…*";
       }
     }
     

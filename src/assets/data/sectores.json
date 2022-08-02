@@ -1,47 +1,62 @@
 [
     {
+        "key": "foodbeverages",
         "name": "Hostelería y alimentación"
     },
     {
+        "key": "professional",
         "name": "Profesionales"
     },
     {
+        "key": "itmarketing",
         "name": "Servicios informáticos y publicidad"
     },
     {
+        "key": "home",
         "name": "Hogar"
     },
     {
+        "key": "health",
         "name": "Estética y salud"
     },
     {
+        "key": "fashionaccesories",
         "name": "Moda y complementos"
     },
     {
+        "key": "businessretail",
         "name": "Comercios"
     },
     {
+        "key": "automotive",
         "name": "Motor"
     },
     {
+        "key": "businessservices",
         "name": "Servicios a empresas"
     },
     {
+        "key": "sports",
         "name": "Deportes"
     },
     {
+        "key": "education",
         "name": "Enseñanza e infantil"
     },
     {
+        "key": "rental",
         "name": "Alojamiento y alquiler"
     },
     {
+        "key": "transportation",
         "name": "Servicios de transporte"
     },
     {
+        "key": "realstate",
         "name": "Inmobiliario"
     },
     {
+        "key": "other",
         "name": "Otros…"
     }
 ]
