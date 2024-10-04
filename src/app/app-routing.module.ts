@@ -9,15 +9,16 @@ import { RegisterComponent } from './register/register.component';
 import { TutorialComponent } from './tutorial/tutorial.component';
 
 const routes: Routes = [
-  {path: "comercios", component: ComerciosComponent},
-  {path: "comercio/:id", component: ComercioComponent},
-  {path: "registro", component: RegisterComponent},
-  {path: "calculadora", component: CalculadoraComponent},
-  {path: "misNegocios", component: MisNegociosComponent},
-  {path: "tutorial", component: TutorialComponent},
-  {path: "metamask", component: MetamaskComponent},
-  {path: "", pathMatch: "full", redirectTo: "comercios"},
-  {path: "**", redirectTo: "comercios"}
+  { path: "comercios", component: ComerciosComponent },
+  { path: "calculadora", component: CalculadoraComponent },
+  { path: "registro", component: RegisterComponent },
+  /* { path: "comercio/:id", component: ComercioComponent },
+  { path: "registro", component: RegisterComponent },
+  { path: "misNegocios", component: MisNegociosComponent },
+  { path: "tutorial", component: TutorialComponent },
+  { path: "metamask", component: MetamaskComponent }, */
+  { path: "", pathMatch: "full", redirectTo: "comercios" },
+  { path: "**", redirectTo: "comercios" }
 ];
 
 @NgModule({
