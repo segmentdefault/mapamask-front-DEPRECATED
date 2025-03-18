@@ -1,0 +1,154 @@
+<div class="background">
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 info">
+                <h1 class="title">{{'slogan1' | translate}}</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 info">
+                <h1 class="subtitle">{{'slogan2' | translate}}</h1>
+            </div>
+        </div>
+
+        <div class="row mt-1">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 info">
+                <p class="">{{'sloganDescription' | translate}}</p>
+            </div>
+        </div>
+    
+        <div class="row mt-3">
+
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" [ngClass]="width >= 768 ? 'start' : 'center'">
+                <select (keydown)="keyDown($event)" [(ngModel)]="sectorInput" name="sector" id="sector" class="search-input">
+                    <option selected>Sector…</option>
+                    <option *ngFor="let sector of sectorsData" [value]="sector.key">{{sector.name | translate}}</option>
+                </select>
+            </div>
+        
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" [ngClass]="width >= 768 ? 'start' : 'center'">
+                <input (keydown)="keyDown($event)" [(ngModel)]="keywordInput" placeholder="{{'keyword' | translate}}" type="text" class="search-input">
+            </div>
+        
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" [ngClass]="width >= 768 ? 'start' : 'center'">
+                <div class="row" style="width: 98%;">
+                    <div class="col col-md-6 col-sm-6 col-6" [ngClass]="width >= 768 ? 'start' : 'center'">
+                        <button (click)="searchBusiness(keywordInput, sectorInput)" class="mapamask-btn search-btn">{{'search' | translate}}</button>
+                    </div>
+
+                    <div class="col col-md-6 col-sm-6 col-6" [ngClass]="width >= 768 ? 'start' : 'center'" *ngIf="mapView">
+                        <button class="view-btn" (click)="viewInList()">{{'viewinlist' | translate}}</button>
+                    </div>
+                    <div class="col col-md-6 col-sm-6 col-6" [ngClass]="width >= 768 ? 'start' : 'center'" *ngIf="listView">
+                        <button class="view-btn" (click)="viewInMap()">{{'viewinmap' | translate}}</button>
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div *ngIf="searchLoading" class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
+            <h3 class="alert alert-warning mt-3" style="width: 40%;">{{'loading' | translate}}</h3>
+        </div>
+    </div>
+    
+    <div class="row mt-3" *ngIf="error != ''">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
+            <h6 class="alert alert-danger" role="alert">{{ error }}</h6>
+        </div>
+    </div>
+
+    <div *ngIf="listView" class="row mt-3">
+        <ng-container *ngIf="!searchLoading">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center" *ngFor="let businessItem of business">
+                <div class="row mt-2 result">
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2" style="padding: 0;">
+
+                        <ng-container *ngIf="businessItem.images[0]; else noImage">
+                            <img class="business-img" [src]="businessItem.images[0] | sanitizeURL" alt="">
+                        </ng-container>
+
+                        <ng-template #noImage>
+                            <img class="business-img" src="../../assets/img/mapamask-logo.png" alt="">
+                        </ng-template>
+                        
+                    </div>
+                    <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10">
+                        <div class="row">
+                            <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-8" style="padding-left: 20px;">
+                                <h3>{{ businessItem.name }}</h3>
+                            </div>
+
+                            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-2 end center-vertically" style="padding: 0;">
+                                <img placement="top" ngbTooltip="{{'businessverified' | translate}}" tooltipClass="tooltip" *ngIf="businessItem.owner != '0x0000000000000000000000000000000000000000'" width="30px" src="../../assets/img/metamask-verified.png">
+                            </div>
+
+                            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-2 end center-vertically" style="padding: 10;">
+                                <a *ngIf="businessItem.distance != -1" placement="top" ngbTooltip="{{'getdirections' | translate}}" tooltipClass="tooltip" href="https://www.google.com/maps/dir/{{currentLatitude}},{{currentLongitude}}/{{businessItem.latitude}},{{businessItem.longitude}}" target="_blank"><i class="fa-solid fa-diamond-turn-right fa-xl"></i></a>
+                                <i *ngIf="businessItem.distance == -1" class="fa-solid fa-diamond-turn-right fa-xl" style="color: #737373; cursor: not-allowed;"></i>
+                            </div>
+            
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="padding-left: 20px;">
+                                <p>{{ businessItem.job }}</p>
+                                <hr>
+                                <p><a [href]="businessItem.web" target="_blank">{{ businessItem.web.substring(11) }}</a></p>
+                                <p>{{ businessItem.phone }} | {{ businessItem.email }}</p>
+                            </div>
+                        </div>
+
+                        <div *ngIf="businessItem.online" class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="padding-left: 20px;">
+                                <p>{{'onlinesell' | translate}} <img width="20px" src="../../assets/img/tick-verde.png" alt="tick"></p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" style="padding-left: 20px;">
+                                <p *ngIf="businessItem.distance != -1">{{ businessItem.distance }}Km</p>
+                                <p *ngIf="businessItem.distance == -1">{{ 'nogeolocation' | translate }}</p>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" [ngClass]="width >= 768 ? 'end' : 'start'" style="padding-left: 20px;">
+                                <div>
+                                    <h6><label class="discount-info" *ngIf="businessItem.discount > 0" style="margin-right: 10px;">{{'discount' | translate}}: -{{ businessItem.discount }}%</label></h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- <div class="row mt-4">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
+                <button class="btn btn-outline-warning" (click)="previousPage()">
+                    <span>
+                        <
+                    </span>
+                </button>
+
+                <button *ngFor="let page of counter(totalPages); let i=index" class="btn btn-outline-warning" (click)="goPage(i+1)">
+                    <span>
+                        {{ i+1 }}
+                    </span>
+                </button>
+
+                <button class="btn btn-outline-warning" (click)="nextPage()">
+                    <span>
+                        >
+                    </span>
+                </button>
+
+            </div>
+        </div> -->
+    </div>
+</div>
+<div id="map"></div>

@@ -1,0 +1,40 @@
+<h1 *ngIf="error" class="alert alert-danger center mt-5">{{ error }}</h1>
+
+<div class="container mt-5" *ngIf="business && !error">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <img class="business-img" [src]="business.images[0]" alt="">
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10">
+            <h1 class="title">{{ business.name }}</h1>
+            <h4 class="job">{{ business.job }}</h4>
+        </div>
+<!-- 
+        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 end">
+            <p class="rating">{{ business.rating }}<i class="fa-solid fa-star fa-md star"></i></p>
+        </div> -->
+    </div>
+
+    <hr>
+
+    <div class="row mt-4">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <p class="description">{{ business.description }}</p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <h3 class="title">Más información:</h3>
+            <ul>
+                <li>{{ business.city }}</li>
+                <li>{{ business.email }}</li>
+                <li>{{ business.phone }}</li>
+                <li>{{ business.web }}</li>
+            </ul>
+        </div>
+    </div>
+    
+</div>

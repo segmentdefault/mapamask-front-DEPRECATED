@@ -1,0 +1,66 @@
+a{
+    text-decoration: none;
+    color: #000000;
+}
+
+span{
+    font-family: "Avenir Next LT Pro Bold";
+    color: #804517;
+}
+
+.bg-light{
+    background-color: transparent !important;
+}
+
+.navbar{
+    font-size: 14pt;
+}
+
+.logo-cs{
+    margin-top: 5rem !important;
+}
+
+.nav-link{
+    padding: 0;
+}
+.nav-link-btn{
+    border-radius: 10px;
+    background-color: #804517;
+    padding: 10px;
+    margin-left: 40px;
+    font-family: "Montserrat";
+    color: #ffffff !important;
+    margin-top: 0;
+}
+
+.nav-link-btn:hover{
+    color: #804517 !important;
+    background-color: #f7911d;
+}
+
+
+.language-flag{
+    width: 35px;
+    height: auto;
+}
+
+.select-language{
+    background: transparent;
+    border: 0;
+    margin-left: 10px;
+}
+
+.modal-footer{
+    button{
+        background-color: #f7911d;
+        border-color: #f7911d;
+    }
+}
+
+@media (max-width: 991px){
+    .nav-link-btn{
+        padding: 5px 10px 5px 10px;
+        margin: 0;
+    }
+
+}

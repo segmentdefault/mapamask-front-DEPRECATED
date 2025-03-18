@@ -1,0 +1,196 @@
+h1{
+    font-size: 27pt;
+}
+
+p{
+    font-size: 15pt;
+}
+
+a{
+    color: #000000;
+    text-decoration: none;
+}
+
+.title{
+    color: #804517;
+}
+
+.subtitle{
+    font-size: 27pt;
+    color: #ffffff;
+}
+
+.container{
+    width: 80%;
+}
+
+input, select{
+    width: 100%;
+}
+
+.search-btn{
+    font-weight: bold;
+    width: 100%;
+    height: 100%;
+}
+
+#map { 
+    height: 500px; 
+    width: 100%;
+}
+
+.view-btn{
+    color: #804517;
+    background-color: transparent;
+    border-radius: 10px;
+    border: 2px solid #804517;
+    font-weight: bold;
+    height: 100%;
+    width: 100%;
+}
+.view-btn:hover{
+    background-color: #E4E4E4;
+    color: #804517;
+    border: 2px solid #804517;
+}
+
+.alert{
+    width: 90%;
+    text-align: center;
+}
+
+.result{
+    border: 1px solid #000000;
+    width: 80%;
+    padding: 10px;
+    border-radius: 5px;
+    
+    h3{
+        font-size: 2vw;
+        margin-bottom: 0;
+    }
+
+    hr{
+        margin: 0.3rem 0 0.3rem 0;
+    }
+
+    p{
+        font-size: 1vw;
+        margin-bottom: 0;
+    }
+
+    a{
+        color: #934f00;
+    }
+
+    i{
+        color: #f7911d;
+    }
+
+    a:hover{
+        text-decoration: underline;
+    }
+
+    .business-img{
+        width: 100%;
+        border-radius: 5px;
+    }
+
+    .google-logo{
+        width: 30px;
+    }
+
+    .link{
+        cursor: pointer;
+    }
+
+    .star{
+        color: #f7911d;
+    }
+
+    .discount-info{
+        margin-right: 10px;
+        color: #f7911d;
+    }
+}
+
+.after{
+    width: 20px;
+}
+
+.before{
+    width: 20px;
+}
+
+.pagination-item{
+    border: 1px solid #f7911d;
+    border-radius: 5px;
+    background-color: #ffffff;
+    padding: 5px;
+}
+
+@media (max-width: 1000px){
+    .container{
+        width: 100%;
+    }
+
+    .result{
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px){
+    input, button, select{
+        margin-top: 10px;
+    }
+
+    .search-input{
+        margin: 15px;
+    }
+}
+
+@media (max-width: 886px){
+    .result{
+        p{
+            font-size: 2.5vw;
+        }
+        h3{
+            font-size: 3vw;
+            margin-bottom: 0;
+        }
+    }
+}
+
+@media (max-width: 500px){
+    #map { 
+        width: 100%;
+        margin: 0;
+    }
+}
+
+@media (max-width: 465px){
+    .container{
+        padding: 0;
+    }
+
+    .info{
+        width: 90%;
+        margin-left: 15px;
+    }
+
+    .result{
+        width: 98%;
+
+        p{
+            font-size: 3.5vw;
+        }
+
+        h3{
+            font-size: 4.5vw;
+        }
+
+        .google-btn{
+            margin-left: 10px;
+        }
+    }
+}

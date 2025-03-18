@@ -1,0 +1,281 @@
+<div class="background">
+  <div class="container">
+    <div *ngIf="hasBusinessToEdit;else notBusinessToEdit">
+    
+      <div class="row mt-5">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 center">
+            <h3>{{'mapamaskcard' | translate}}</h3>
+        </div>
+      </div>
+
+    </div>
+
+    <ng-template #notBusinessToEdit>
+      <div class="row mt-5">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12-col-12 center">
+            <h3 style="color: #ffffff;">{{'fillform' | translate}}</h3>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
+          <h4 style="font-family: 'Montserrat'; font-size: 1.3rem;">{{'connectwalletto' | translate}}</h4>
+        </div>
+      </div>
+
+      <div *ngIf="!connected; else isConnected" class="row mt-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
+          <button class="mapamask-btn" (click)="connectWallet()">{{'connectwallet' | translate}}</button>
+        </div>
+      </div>
+  
+      <ng-template #isConnected>
+        <div class="row mt-3">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
+            <button class="mapamask-btn" (click)="showBusiness()">{{'checkbusiness' | translate}}</button>
+          </div>
+        </div>
+      </ng-template>
+      
+    </ng-template>
+    
+  </div>
+</div>
+<div class="container register-container">
+  <div class="container form-container">
+
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-5">
+          <input [(ngModel)]="name" type="text" placeholder="{{'businessname' | translate}}*" required>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 end mt-3">
+        <input [(ngModel)]="email" type="text" placeholder="{{'email' | translate}}*" required>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 start mt-3">
+        <input [(ngModel)]="phone" type="text" placeholder="{{'telephone' | translate}}">
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 end mt-3">
+        <button class="mapamask-btn-white" style="width: 100%;" data-bs-toggle="modal" data-bs-target="#selectSectorModal">{{ buttonSectorPlaceholder }}</button>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 start mt-3">
+          <input [(ngModel)]="job" type="text" placeholder="{{'speciality' | translate}}">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 end mt-3">
+        <select [(ngModel)]="country" type="text">
+          <option *ngFor="let country of countriesData" [value]="country.name_en">{{ country.name_en }}</option>
+        </select>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 start mt-3">
+        <input [(ngModel)]="city" type="text" placeholder="{{'city' | translate}}*">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 center mt-3">
+        <input [(ngModel)]="web" type="text" placeholder="{{'website' | translate}}">
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 center mt-3">
+        <button class="mapamask-btn-white" style="width: 100%;" data-bs-toggle="modal" data-bs-target="#setDiscountModal">{{ buttonDiscountPlaceholder }}</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
+        <textarea [(ngModel)]="description" placeholder="{{'writekeywords' | translate}}" required></textarea>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
+        <input id="img" class="form-control" style="display: none;" type="file" accept="image/png,image/jpg,image/jpeg" (change)="saveImage($event)">
+        <label *ngIf="!imageselected" class="img-input" for="img">{{'selectfile' | translate}}</label>
+        <label *ngIf="imageselected" class="img-input" for="img">{{'fileselected' | translate}}</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-1">
+        <p>{{imageselected}}</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
+    <h6>*{{'pinmap' | translate}}</h6>
+  </div>
+</div>
+
+<div class="container register-container">
+  <div class="container form-container">
+
+    <div class="row">
+
+      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12 mt-3">
+        <input [(ngModel)]="street" type="text" placeholder="{{'street' | translate}}">
+      </div>
+
+      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12 mt-3">
+        <input [(ngModel)]="number" type="text" placeholder="{{'number' | translate}}">
+      </div>
+
+      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12 mt-3">
+        <input [(ngModel)]="cp" type="text" placeholder="{{'postcode' | translate}}">
+      </div>
+
+      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12 mt-3 center">
+        <button class="mapamask-btn" (click)="showAtMap(number, street, cp, city, country)">{{'search' | translate}}</button>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<div class="center">
+  <div id="map"></div>
+</div>
+
+<div class="row">
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
+    <h5 class="alert alert-danger" *ngIf="status">{{ status }}</h5>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3">
+    <button *ngIf="!hasBusinessToEdit" class="mapamask-btn" (click)="sendRegisterRequest()">{{'send' | translate}}</button>
+    <button *ngIf="hasBusinessToEdit" class="mapamask-btn" (click)="sendRegisterRequest()">{{'updatebusiness' | translate}}</button>
+  </div>
+</div>
+
+
+<!-- SET DISCOUNT MODAL -->
+<div class="modal fade" id="setDiscountModal" tabindex="-1" role="dialog" aria-labelledby="setDiscountModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{'adddiscount' | translate}}</h5>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <h6>{{'adddiscountdesc' | translate}}</h6>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6">
+            <div class="discount box">
+              <div class="checkbox">
+                <label class="checkbox-wrapper">
+                  <input (change)="hideInput()" [(ngModel)]="discount" value="5" name="discount" type="radio" class="sector-checkbox checkbox-input" />
+                  <span class="checkbox-tile">
+                    <span class="checkbox-label">5%</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6">
+            <div class="discount box">
+              <div class="checkbox">
+                <label class="checkbox-wrapper">
+                  <input (change)="hideInput()" [(ngModel)]="discount" value="10" name="discount" type="radio" class="sector-checkbox checkbox-input" />
+                  <span class="checkbox-tile">
+                    <span class="checkbox-label">10%</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6">
+            <div class="discount box">
+              <div class="checkbox">
+                <label class="checkbox-wrapper">
+                  <input (change)="hideInput()" [(ngModel)]="discount" value="21" name="discount" type="radio" class="sector-checkbox checkbox-input" />
+                  <span class="checkbox-tile">
+                    <span class="checkbox-label">21%</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6">
+            <div class="discount box">
+              <div class="checkbox">
+                <label class="checkbox-wrapper">
+                  <input (change)="showInput()" name="discount" type="radio" class="sector-checkbox checkbox-input" />
+                  <span class="checkbox-tile">
+                    <span class="checkbox-label">{{'other' | translate}}</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="customDiscount" class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
+            <input [(ngModel)]="discount" class="custom-discount" type="text"><span class="percentage"> %</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="getDiscount()">{{'accept' | translate}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTOR SELECTION MODAL -->
+<div class="modal fade" id="selectSectorModal" tabindex="-1" role="dialog" aria-labelledby="selectSectorModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{'chooserelatedsectors' | translate}}</h5>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-6" *ngFor="let sector of sectorsData;let i=index">
+            <div class="checkbox">
+              <label class="checkbox-wrapper">
+                <input [value]="sector.name" [(ngModel)]="indexes[i]" type="checkbox" class="sector-checkbox checkbox-input" />
+                <span class="checkbox-tile">
+                  <span class="checkbox-label">{{sector.key | translate}}</span>
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center mt-3 checkbox-container">
+            <input class="online-checkbox" [(ngModel)]="onlineService" type="checkbox" id="online-business" value="online"><span>{{ 'onlinesellingoffer' | translate }}</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="getCheckboxes()">{{'accept' | translate}}</button>
+      </div>
+    </div>
+  </div>
+</div>

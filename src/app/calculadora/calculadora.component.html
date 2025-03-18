@@ -1,0 +1,79 @@
+<div class="row mt-5">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 center">
+        <p>{{'calculatordesc' | translate}}</p>
+    </div>
+</div>
+
+<div class="calculadora mt-5">
+    <div class="row">
+        <div class="col-xl-5 col-lg-5 col-md-5 col-sm-5 col-5 end">
+            <select [(ngModel)]="fiat" name="fiat" id="fiat">
+                <option value="EUR">EUR</option>
+                <option value="USD">USD</option>
+            </select>
+        </div>
+        <div class="col-xl-7 col-lg-7 col-md-7 col-sm-7 col-7">
+            <input id="fiatAmount" [(ngModel)]="fiatAmount" type="text">
+        </div>
+    </div>
+    
+    <div class="row mt-3">
+        <div class="col-xl-5 col-lg-5 col-md-5 col-sm-5 col-5 end">
+            <select [(ngModel)]="crypto" name="crypto" id="crypto">
+                <option value="BTC">BTC</option>
+                <optgroup label="Alt coins">
+                    <option value="BNB">BNB</option>
+                    <option value="ETH">ETH</option>
+                    <option value="MATIC">MATIC</option>
+                    <option value="AVAX">AVAX</option>
+                    <option value="NEAR">NEAR</option>
+                    <option value="ROSE">ROSE</option>
+                    <option value="IOTA">IOTA</option>
+                    <option value="DOGE">DOGE</option>
+                    <option value="SHIB">SHIB</option>
+                    <option value="SOL">SOL</option>
+                    <option value="ADA">ADA</option>
+                    <option value="LUNA">LUNA</option>
+                    <option value="XRP">XRP</option>
+                    <option value="DOT">DOT</option>
+                </optgroup>
+                <optgroup label="Stable coins">
+                    <option value="USDT">USDT</option>
+                    <option value="DAI">DAI</option>
+                    <option value="BUSD">BUSD</option>
+                    <option value="USDC">USDC</option>
+                </optgroup>
+            </select>
+        </div>
+        <div class="col-xl-7 col-lg-7 col-md-7 col-sm-7 col-7">
+            <input [(ngModel)]="resultCrypto" type="text" disabled>
+        </div>
+    </div>
+</div>
+
+<div class="row crypto-logos mt-5 center">
+    <div class="col-xl-1 col-lg-1 col-md-1 col-sm-2 col-5">
+        <img class="logo-crypto" src="../../assets/img/btc-logo.png" alt="">
+    </div>
+    <div class="col-xl-1 col-lg-1 col-md-1 col-sm-2 col-5">
+        <img class="logo-crypto" src="../../assets/img/bnb-logo.png" alt="">
+    </div>
+    <div class="col-xl-1 col-lg-1 col-md-1 col-sm-2 col-5">
+        <img class="logo-crypto" src="../../assets/img/matic-logo.png" alt="">
+    </div>
+    <div class="col-xl-1 col-lg-1 col-md-1 col-sm-2 col-5">
+        <img class="logo-crypto" src="../../assets/img/eth-logo.png" alt="">
+    </div>
+    <div class="col-xl-1 col-lg-1 col-md-1 col-sm-2 col-5">
+        <img class="logo-crypto" src="../../assets/img/iota-logo.png" alt="">
+    </div>
+    <div class="col-xl-1 col-lg-1 col-md-1 col-sm-2 col-5">
+        <img class="logo-crypto" src="../../assets/img/usdt-logo.png" alt="">
+    </div>
+    <div class="col-xl-1 col-lg-1 col-md-1 col-sm-2 col-5">
+        <img class="logo-crypto" src="../../assets/img/dai-logo.png" alt="">
+    </div>
+    <div class="col-xl-1 col-lg-1 col-md-1 col-sm-2 col-5">
+        <img class="logo-crypto" src="../../assets/img/busd-logo.png" alt="">
+    </div>
+</div>

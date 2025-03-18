@@ -1,0 +1,117 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
+
+@font-face {
+    font-family: "Avenir Next LT Pro Regular";
+    src: url('./assets/fonts/AvenirNextLTPro-Regular.otf');
+}
+
+@font-face {
+    font-family: "Avenir Next LT Pro Bold";
+    src: url('./assets/fonts/AvenirNextLTPro-Bold.otf');
+}
+
+@font-face {
+    font-family: "Montserrat";
+    src: url('./assets/fonts/Montserrat/Montserrat-Light.ttf');
+}
+
+@font-face {
+    font-family: "Montserrat-bold";
+    src: url('./assets/fonts/Montserrat/Montserrat-Bold.ttf');
+}
+
+@font-face {
+    font-family: "Montserrat-semiBold";
+    src: url('./assets/fonts/Montserrat/Montserrat-SemiBold.ttf');
+}
+
+h1,h2,h3,h4,h5,h6{
+    font-family: "Montserrat-bold";
+    color: #804517;
+}
+body, html{
+    /* background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#FCD6AB)) fixed; */
+    background-color: #ffffff;
+    font-family: "Montserrat";
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.end{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.center{
+    display: flex;
+    justify-content: center;
+}
+
+.start{
+    display: flex;
+    justify-content: flex-start;
+}
+
+.center-vertically{
+    display: flex;
+    align-items: center;
+}
+
+.end-vertically{
+    display: flex;
+    align-items: flex-end;
+}
+
+.background{
+    width: 100%;
+    background-color: #f7911d;
+    padding: 5px 0 50px 0;
+    margin: 10px 0 0 0;
+}
+
+.mapamask-btn{
+    border-radius: 10px;
+    border: 2px solid #804517;
+    background-color: #804517;
+    color: #ffffff;
+    padding: 10px;
+}
+
+.mapamask-btn:hover{
+    background-color: #E4E4E4;
+    color: #804517;
+}
+
+.mapamask-btn-white{
+    border-radius: 10px;
+    border: 1px solid #000000;
+    background-color: #ffffff;
+    color: #000000;
+    padding: 10px;
+}
+
+input, select, textarea{
+    border: 0;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid #000000;
+    padding-left: 20px;
+    background-color: #ffffff;
+}
+
+textarea{
+    padding: 10px 0 0 20px;
+    height: 100px;
+}
+
+input[type=file]{
+    border: 0;
+}
+
+input[type=file]::-webkit-file-upload-button {
+    border: 1px solid #ffffff;
+    background-color: #f7911d;
+}
